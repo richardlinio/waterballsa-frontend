@@ -1,5 +1,5 @@
 {
-  "name": "nextjs-magic-shadcn-ui-template",
+  "name": "waterballsa-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.56.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
