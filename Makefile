@@ -7,9 +7,9 @@
 fmt:
 	npx prettier --write "src/**/*.{js,jsx,ts,tsx,json,css,md}"
 
-# 執行 ESLint 檢查
+# 執行 ESLint 和 TypeScript 類型檢查（並行）
 lint:
-	npx next lint
+	npx next lint & npx tsc --noEmit & wait
 
 # 執行 E2E 測試（Playwright）
 test:

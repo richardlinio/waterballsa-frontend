@@ -22,9 +22,6 @@
 // Export types
 export type {
   HealthStatus,
-  ComponentHealth,
-  DatabaseHealth,
-  HealthComponents,
   HealthResponse,
   ApiError,
   ApiResponse,

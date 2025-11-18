@@ -8,36 +8,12 @@
 export type HealthStatus = 'UP' | 'DOWN'
 
 /**
- * Component health status
- */
-export interface ComponentHealth {
-  status: HealthStatus
-}
-
-/**
- * Database health details
- */
-export interface DatabaseHealth extends ComponentHealth {
-  details: {
-    database: string
-    validConnection: boolean
-  }
-}
-
-/**
- * Health response components
- */
-export interface HealthComponents {
-  application: ComponentHealth
-  database: DatabaseHealth
-}
-
-/**
  * Health check response
+ * Simple format matching backend implementation
  */
 export interface HealthResponse {
   status: HealthStatus
-  components: HealthComponents
+  database: HealthStatus
 }
 
 /**

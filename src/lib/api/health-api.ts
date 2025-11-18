@@ -14,7 +14,7 @@ export const healthApi = {
    * const result = await healthApi.checkHealth()
    * if (result.success) {
    *   console.log('Health status:', result.data.status)
-   *   console.log('Database status:', result.data.components.database.status)
+   *   console.log('Database status:', result.data.database)
    * } else {
    *   console.error('Health check failed:', result.error.message)
    * }

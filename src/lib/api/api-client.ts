@@ -1,4 +1,4 @@
-import { ApiError, ApiResponse } from './types'
+import { ApiResponse } from './types'
 
 /**
  * API Client Configuration

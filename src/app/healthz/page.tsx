@@ -87,9 +87,7 @@ const HealthPage = () => {
                 Status:{' '}
                 <span
                   className={
-                    data.database === 'UP'
-                      ? 'text-green-600'
-                      : 'text-red-600'
+                    data.database === 'UP' ? 'text-green-600' : 'text-red-600'
                   }
                 >
                   {data.database}
