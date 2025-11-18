@@ -17,22 +17,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **表單**: react-hook-form + zod + @hookform/resolvers
 - **資料取得**: SWR
 - **動畫**: framer-motion
-- **套件管理器**: pnpm
+- **套件管理器**: npm
 
 ## 開發指令
 
 ```bash
 # 開發模式 (使用 Turbopack)
-pnpm dev
+npm run dev
 
 # 建置專案
-pnpm build
+npm run build
 
 # 啟動正式環境伺服器
-pnpm start
+npm start
 
 # 執行 ESLint 檢查
-pnpm lint
+npm run lint
 ```
 
 ## 專案架構
