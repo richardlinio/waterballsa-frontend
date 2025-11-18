@@ -15,4 +15,8 @@ lint:
 test:
 	npx playwright test
 
+# 顯示 Playwright 測試報告
+test-report:
+	npx playwright show-report
+
 
