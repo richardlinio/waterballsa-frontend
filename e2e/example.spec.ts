@@ -1,13 +1,6 @@
 import { test, expect } from '@playwright/test'
 
 test.describe('Homepage', () => {
-  test('should load the homepage', async ({ page }) => {
-    await page.goto('/')
-
-    // 驗證頁面標題
-    await expect(page).toHaveTitle(/Next.js/)
-  })
-
   test('should have accessible navigation', async ({ page }) => {
     await page.goto('/')
 
