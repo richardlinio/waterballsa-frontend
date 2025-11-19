@@ -1,4 +1,4 @@
-.PHONY: fmt lint test install-deps help
+.PHONY: fmt lint build test install-deps help
 
 # 預設目標
 .DEFAULT_GOAL := help
@@ -10,6 +10,10 @@ fmt:
 # 執行 ESLint 和 TypeScript 類型檢查（並行）
 lint:
 	npx next lint & npx tsc --noEmit & wait
+
+# 建置專案
+build:
+	trash .next && npm run build
 
 # 執行 E2E 測試（Playwright）
 test-e2e:
