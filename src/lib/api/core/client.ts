@@ -95,7 +95,7 @@ export class ApiClient {
    * Check if method is idempotent (safe to retry)
    */
   private isIdempotentMethod(method: HttpMethod): boolean {
-    return ['GET', 'DELETE'].includes(method)
+    return ['GET', 'PUT', 'DELETE'].includes(method)
   }
 
   /**
