@@ -19,18 +19,14 @@
  * ```
  */
 
-// Export types
-export type {
-  HealthStatus,
-  HealthResponse,
-  ApiError,
-  ApiResponse,
-} from './types'
+// Export core types
+export type { ApiError, ApiResponse } from './core/types'
+export type { ApiClientConfig } from './core/config'
 
 // Export API client
-export { ApiClient, apiClient, createApiClient } from './api-client'
-export type { ApiClientConfig } from './api-client'
+export { ApiClient, apiClient, createApiClient } from './core/client'
 
-// Export API functions
-export { healthApi } from './health-api'
-export { default as health } from './health-api'
+// Export service APIs and their types
+export { healthApi } from './services/health'
+export { default as health } from './services/health'
+export type { HealthStatus, HealthResponse } from './services/health'
