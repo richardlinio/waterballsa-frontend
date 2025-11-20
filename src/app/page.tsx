@@ -24,9 +24,9 @@ export default function HomePage() {
       {/* Course Cards */}
       <div className="grid gap-6 md:grid-cols-2">
         {/* Card 1: 軟體設計模式精通之旅 */}
-        <div className="overflow-hidden rounded-lg border border-yellow-500/50 bg-gradient-to-br from-[#1a1a1a] to-[#0f0f0f]">
+        <div className="overflow-hidden rounded-lg border border-yellow-500/50 bg-linear-to-br from-[#1a1a1a] to-[#0f0f0f]">
           {/* Card Image */}
-          <div className="relative aspect-video bg-gradient-to-br from-blue-900/30 to-purple-900/30 p-6">
+          <div className="relative aspect-video bg-linear-to-br from-blue-900/30 to-purple-900/30 p-6">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
                 <div className="mb-4 flex justify-center">
@@ -100,9 +100,9 @@ export default function HomePage() {
         </div>
 
         {/* Card 2: AI x BDD */}
-        <div className="overflow-hidden rounded-lg border border-yellow-500/50 bg-gradient-to-br from-[#1a1a1a] to-[#0f0f0f]">
+        <div className="overflow-hidden rounded-lg border border-yellow-500/50 bg-linear-to-br from-[#1a1a1a] to-[#0f0f0f]">
           {/* Card Image */}
-          <div className="relative aspect-video bg-gradient-to-br from-blue-900/30 to-cyan-900/30 p-6">
+          <div className="relative aspect-video bg-linear-to-br from-blue-900/30 to-cyan-900/30 p-6">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
                 <div className="mb-4 flex justify-center">
