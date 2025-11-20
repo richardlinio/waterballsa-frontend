@@ -59,29 +59,21 @@ export function RegisterForm() {
         toast.success('註冊成功！', {
           description: '即將跳轉到登入頁面...',
         })
-        // Redirect to login page after successful registration
         setTimeout(() => {
           router.push('/login')
         }, 1500)
-      } else {
-        // Handle different error cases
-        if (result.error.status === 409) {
-          toast.error('使用者名稱已存在', {
-            description: '請選擇其他使用者名稱',
-          })
-          form.setError('username', {
-            type: 'manual',
-            message: '此使用者名稱已被使用',
-          })
-        } else if (result.error.status === 400) {
-          toast.error('註冊失敗', {
-            description: result.error.message || '請檢查您的輸入',
-          })
-        } else {
-          toast.error('註冊失敗', {
-            description: '請稍後再試',
-          })
-        }
+        return
+      }
+
+      // Handle error cases - use backend error messages directly
+      toast.error(result.error.message)
+
+      // Set form error for 409 conflict (username already exists)
+      if (result.error.status === 409) {
+        form.setError('username', {
+          type: 'manual',
+          message: '此使用者名稱已存在，請使用其他使用者名稱',
+        })
       }
     } catch {
       toast.error('發生錯誤', {
