@@ -19,21 +19,34 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
 // Validation schema based on API spec
-const registerSchema = z.object({
-  username: z
-    .string()
-    .min(3, '使用者名稱至少需要 3 個字元')
-    .max(50, '使用者名稱最多 50 個字元')
-    .regex(/^[a-zA-Z0-9_]+$/, '使用者名稱只能包含英文、數字和底線'),
-  password: z
-    .string()
-    .min(8, '密碼至少需要 8 個字元')
-    .max(72, '密碼最多 72 個字元')
-    .regex(
-      /^[a-zA-Z0-9@$!%*?&#]+$/,
-      '密碼只能包含英文、數字和特殊符號 (@$!%*?&#)'
-    ),
-})
+const registerSchema = z
+  .object({
+    username: z
+      .string()
+      .min(3, '使用者名稱至少需要 3 個字元')
+      .max(50, '使用者名稱最多 50 個字元')
+      .regex(/^[a-zA-Z0-9_]+$/, '使用者名稱只能包含英文、數字和底線'),
+    password: z
+      .string()
+      .min(8, '密碼至少需要 8 個字元')
+      .max(72, '密碼最多 72 個字元')
+      .regex(
+        /^[a-zA-Z0-9@$!%*?&#]+$/,
+        '密碼只能包含英文、數字和特殊符號 (@$!%*?&#)'
+      ),
+    confirmPassword: z
+      .string()
+      .min(8, '密碼至少需要 8 個字元')
+      .max(72, '密碼最多 72 個字元')
+      .regex(
+        /^[a-zA-Z0-9@$!%*?&#]+$/,
+        '密碼只能包含英文、數字和特殊符號 (@$!%*?&#)'
+      ),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: '兩次輸入的密碼不一致',
+    path: ['confirmPassword'],
+  })
 
 type RegisterFormValues = z.infer<typeof registerSchema>
 
@@ -46,6 +59,7 @@ export function RegisterForm() {
     defaultValues: {
       username: '',
       password: '',
+      confirmPassword: '',
     },
   })
 
@@ -53,7 +67,8 @@ export function RegisterForm() {
     setIsLoading(true)
 
     try {
-      const result = await authApi.register(data)
+      const { confirmPassword, ...registerData } = data
+      const result = await authApi.register(registerData)
 
       if (result.success) {
         toast.success('註冊成功！', {
@@ -114,6 +129,24 @@ export function RegisterForm() {
                 <Input
                   type="password"
                   placeholder="請輸入密碼"
+                  {...field}
+                  disabled={isLoading}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>確認密碼</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="請再次輸入密碼"
                   {...field}
                   disabled={isLoading}
                 />
