@@ -1,0 +1,28 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563EB;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="overlayGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#60A5FA;stop-opacity:0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="12" cy="12" r="12" fill="url(#bgGradient)" />
+
+  <!-- Overlay circle -->
+  <circle cx="12" cy="12" r="12" fill="url(#overlayGradient)" />
+
+  <!-- Main water drop shape -->
+  <path
+    d="M12 2C12 2 8 6 8 12C8 15.3137 10.6863 18 14 18C17.3137 18 20 15.3137 20 12C20 6 16 2 12 2Z"
+    fill="white"
+    opacity="0.9"
+  />
+
+  <!-- Secondary water drop -->
+  <circle cx="9" cy="16" r="5" fill="white" opacity="0.7" />
+</svg>
