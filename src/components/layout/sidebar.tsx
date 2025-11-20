@@ -50,7 +50,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navItems.map((item) => {
+              {navItems.map(item => {
                 const Icon = item.icon
                 const isActive = pathname === item.href
 
