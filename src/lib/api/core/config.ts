@@ -1,4 +1,5 @@
 import { ApiResponse } from './types'
+import { getToken } from '@/lib/auth'
 
 /**
  * HTTP methods supported by the API client
@@ -55,6 +56,30 @@ export interface ApiClientConfig {
 }
 
 /**
+ * Default request interceptor - adds Authorization header if token exists
+ */
+const defaultRequestInterceptor = (
+  config: RequestConfig
+): RequestConfig | Promise<RequestConfig> => {
+  const token = getToken()
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`
+  }
+  return config
+}
+
+/**
+ * Default response interceptor
+ * Note: 401 handling is delegated to the application layer (useApi hook)
+ */
+const defaultResponseInterceptor = <T>(
+  response: ApiResponse<T>
+): ApiResponse<T> => {
+  // Can be used for logging or other cross-cutting concerns
+  return response
+}
+
+/**
  * Default API client configuration
  */
 export const defaultConfig: ApiClientConfig = {
@@ -66,5 +91,9 @@ export const defaultConfig: ApiClientConfig = {
   retry: {
     maxRetries: 3,
     retryDelay: 100,
+  },
+  interceptors: {
+    request: defaultRequestInterceptor,
+    response: defaultResponseInterceptor,
   },
 }

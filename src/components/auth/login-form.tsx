@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
+import Link from 'next/link'
 import { authApi } from '@/lib/api'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,77 +18,63 @@ import {
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/contexts/auth-context'
 
 // Validation schema based on API spec
-const registerSchema = z
-  .object({
-    username: z
-      .string()
-      .min(3, '使用者名稱至少需要 3 個字元')
-      .max(50, '使用者名稱最多 50 個字元')
-      .regex(/^[a-zA-Z0-9_]+$/, '使用者名稱只能包含英文、數字和底線'),
-    password: z
-      .string()
-      .min(8, '密碼至少需要 8 個字元')
-      .max(72, '密碼最多 72 個字元')
-      .regex(
-        /^[a-zA-Z0-9@$!%*?&#]+$/,
-        '密碼只能包含英文、數字和特殊符號 (@$!%*?&#)'
-      ),
-    confirmPassword: z
-      .string()
-      .min(8, '密碼至少需要 8 個字元')
-      .max(72, '密碼最多 72 個字元')
-      .regex(
-        /^[a-zA-Z0-9@$!%*?&#]+$/,
-        '密碼只能包含英文、數字和特殊符號 (@$!%*?&#)'
-      ),
-  })
-  .refine(data => data.password === data.confirmPassword, {
-    message: '兩次輸入的密碼不一致',
-    path: ['confirmPassword'],
-  })
+const loginSchema = z.object({
+  username: z
+    .string()
+    .min(1, '請輸入使用者名稱')
+    .min(3, '使用者名稱至少需要 3 個字元'),
+  password: z.string().min(1, '請輸入密碼').min(8, '密碼至少需要 8 個字元'),
+})
 
-type RegisterFormValues = z.infer<typeof registerSchema>
+type LoginFormValues = z.infer<typeof loginSchema>
 
-export function RegisterForm() {
+export function LoginForm() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const { login } = useAuth()
 
-  const form = useForm<RegisterFormValues>({
-    resolver: zodResolver(registerSchema),
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       username: '',
       password: '',
-      confirmPassword: '',
     },
   })
 
-  async function onSubmit(data: RegisterFormValues) {
+  async function onSubmit(data: LoginFormValues) {
     setIsLoading(true)
 
     try {
-      const { ...registerData } = data
-      const result = await authApi.register(registerData)
+      const result = await authApi.login(data)
 
       if (result.success) {
-        toast.success('註冊成功！', {
-          description: '即將跳轉到登入頁面...',
+        // 儲存 token 和 user info 到 auth context
+        login(result.data.accessToken, result.data.user)
+
+        toast.success('登入成功！', {
+          description: `歡迎回來，${result.data.user.username}`,
         })
-        setTimeout(() => {
-          router.push('/login')
-        }, 1500)
+
+        // 跳轉到首頁
+        router.push('/')
         return
       }
 
       // Handle error cases - use backend error messages directly
       toast.error(result.error.message)
 
-      // Set form error for 409 conflict (username already exists)
-      if (result.error.status === 409) {
+      // Set form error for specific cases if needed
+      if (result.error.status === 401) {
         form.setError('username', {
           type: 'manual',
-          message: '此使用者名稱已存在，請使用其他使用者名稱',
+          message: ' ',
+        })
+        form.setError('password', {
+          type: 'manual',
+          message: '使用者名稱或密碼錯誤',
         })
       }
     } catch {
@@ -111,6 +98,7 @@ export function RegisterForm() {
               <FormControl>
                 <Input
                   placeholder="請輸入使用者名稱"
+                  autoComplete="username"
                   {...field}
                   disabled={isLoading}
                 />
@@ -129,24 +117,7 @@ export function RegisterForm() {
                 <Input
                   type="password"
                   placeholder="請輸入密碼"
-                  {...field}
-                  disabled={isLoading}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>確認密碼</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  placeholder="請再次輸入密碼"
+                  autoComplete="current-password"
                   {...field}
                   disabled={isLoading}
                 />
@@ -156,8 +127,18 @@ export function RegisterForm() {
           )}
         />
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? '註冊中...' : '註冊'}
+          {isLoading ? '登入中...' : '登入'}
         </Button>
+
+        <div className="text-center text-sm text-muted-foreground">
+          還沒有帳號？
+          <Link
+            href="/register"
+            className="ml-1 text-primary underline-offset-4 hover:underline"
+          >
+            立即註冊
+          </Link>
+        </div>
       </form>
     </Form>
   )
