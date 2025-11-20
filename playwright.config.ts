@@ -12,9 +12,13 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    // Add extra HTTP headers if needed for backend communication
+    extraHTTPHeaders: {
+      'Accept-Language': 'zh-TW',
+    },
   },
 
   projects: [
@@ -25,8 +29,10 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
+    command: 'echo "Using existing Docker services"',
+    url: 'http://localhost',
+    reuseExistingServer: true,
+    // Timeout for waiting for the server to start (default: 60s)
+    timeout: 120 * 1000,
   },
 })

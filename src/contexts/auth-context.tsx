@@ -16,6 +16,7 @@ import {
   setUserInfo,
   removeUserInfo,
 } from '@/lib/auth'
+import { authApi } from '@/lib/api'
 import type { UserInfo } from '@/lib/api/services/auth'
 
 interface AuthContextType {
@@ -23,7 +24,7 @@ interface AuthContextType {
   isAuthenticated: boolean
   isLoading: boolean
   login: (token: string, user: UserInfo) => void
-  logout: () => void
+  logout: () => Promise<void>
   updateUser: (user: UserInfo) => void
 }
 
@@ -59,10 +60,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUser(userData)
   }, [])
 
-  const logout = useCallback(() => {
-    removeToken()
-    removeUserInfo()
-    setUser(null)
+  const logout = useCallback(async () => {
+    try {
+      // Call backend API to invalidate token (add to blacklist)
+      await authApi.logout()
+    } catch (error) {
+      // Even if API call fails, we should still clear local state
+      console.error('Logout API call failed:', error)
+    } finally {
+      // Always clear local storage and state
+      removeToken()
+      removeUserInfo()
+      setUser(null)
+    }
   }, [])
 
   const updateUser = useCallback((userData: UserInfo) => {
