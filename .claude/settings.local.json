@@ -4,7 +4,9 @@
       "Bash(make test:*)",
       "Bash(make lint:*)",
       "Bash(make test-e2e:*)",
-      "Bash(make fmt:*)"
+      "Bash(make fmt:*)",
+      "Bash(npx shadcn:*)",
+      "Bash(npm run dev:*)"
     ],
     "deny": [],
     "ask": []

@@ -63,4 +63,8 @@ export const defaultConfig: ApiClientConfig = {
   headers: {
     'Content-Type': 'application/json',
   },
+  retry: {
+    maxRetries: 3,
+    retryDelay: 100,
+  },
 }

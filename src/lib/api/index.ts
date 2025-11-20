@@ -30,3 +30,14 @@ export { ApiClient, apiClient, createApiClient } from './core/client'
 export { healthApi } from './services/health'
 export { default as health } from './services/health'
 export type { HealthStatus, HealthResponse } from './services/health'
+
+export { authApi } from './services/auth'
+export { default as auth } from './services/auth'
+export type {
+  RegisterRequest,
+  RegisterResponse,
+  LoginRequest,
+  LoginResponse,
+  LogoutResponse,
+  UserInfo,
+} from './services/auth'

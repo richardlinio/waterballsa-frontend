@@ -95,7 +95,7 @@ export class ApiClient {
    * Check if method is idempotent (safe to retry)
    */
   private isIdempotentMethod(method: HttpMethod): boolean {
-    return ['GET', 'DELETE'].includes(method)
+    return ['GET', 'PUT', 'DELETE'].includes(method)
   }
 
   /**
@@ -178,7 +178,7 @@ export class ApiClient {
         ...options?.headers,
       },
       body: data,
-      timeout: options?.timeout ?? this.config.timeout ?? 10000,
+      timeout: options?.timeout ?? this.config.timeout!,
     }
 
     // Apply request interceptor if configured
@@ -187,8 +187,8 @@ export class ApiClient {
     }
 
     // Retry configuration
-    const maxRetries = this.config.retry?.maxRetries ?? 3
-    const baseDelay = this.config.retry?.retryDelay ?? 100
+    const maxRetries = this.config.retry!.maxRetries!
+    const baseDelay = this.config.retry!.retryDelay!
 
     let lastError: ApiResponse<T> | null = null
 
