@@ -1,11 +1,11 @@
-import { ApiResponse } from './types'
 import {
+  ApiResponse,
   HttpMethod,
   RequestOptions,
   RequestConfig,
   ApiClientConfig,
-  defaultConfig,
-} from './config'
+} from '@/lib/api/api-schema'
+import { defaultConfig } from './config'
 
 /**
  * API Client class for making HTTP requests

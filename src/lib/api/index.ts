@@ -20,24 +20,28 @@
  */
 
 // Export core types
-export type { ApiError, ApiResponse } from './core/types'
-export type { ApiClientConfig } from './core/config'
-
-// Export API client
-export { ApiClient, apiClient, createApiClient } from './core/client'
-
-// Export service APIs and their types
-export { healthApi } from './services/health'
-export { default as health } from './services/health'
-export type { HealthStatus, HealthResponse } from './services/health'
-
-export { authApi } from './services/auth'
-export { default as auth } from './services/auth'
 export type {
+  ApiError,
+  ApiResponse,
+  ApiClientConfig,
+  HttpMethod,
+  RequestOptions,
+  RequestConfig,
+  Interceptors,
+  RetryConfig,
+  HealthStatus,
+  HealthResponse,
   RegisterRequest,
   RegisterResponse,
   LoginRequest,
   LoginResponse,
   LogoutResponse,
   UserInfo,
-} from './services/auth'
+} from '@/lib/api/api-schema'
+
+// Export API client
+export { ApiClient, apiClient, createApiClient } from './core/client'
+
+// Export service APIs
+export { healthApi } from './services/health'
+export { authApi } from './services/auth'

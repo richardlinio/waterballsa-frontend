@@ -17,7 +17,7 @@ import {
   removeUserInfo,
 } from '@/lib/auth'
 import { authApi } from '@/lib/api'
-import type { UserInfo } from '@/lib/api/services/auth'
+import type { UserInfo } from '@/lib/api/api-schema'
 
 interface AuthContextType {
   user: UserInfo | null

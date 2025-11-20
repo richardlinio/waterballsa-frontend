@@ -1,19 +1,5 @@
 import { apiClient } from '../core/client'
-import { ApiResponse } from '../core/types'
-
-/**
- * Health status enum
- */
-export type HealthStatus = 'UP' | 'DOWN'
-
-/**
- * Health check response
- * Simple format matching backend implementation
- */
-export interface HealthResponse {
-  status: HealthStatus
-  database: HealthStatus
-}
+import { ApiResponse, HealthResponse } from '@/lib/api/api-schema'
 
 /**
  * Health Check API

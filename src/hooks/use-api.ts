@@ -3,7 +3,7 @@
 import { useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
-import type { ApiResponse } from '@/lib/api/core/types'
+import type { ApiResponse } from '@/lib/api/api-schema'
 
 /**
  * Custom hook for API calls with automatic 401 handling

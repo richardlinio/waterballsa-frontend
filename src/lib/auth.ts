@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import type { UserInfo } from './api/services/auth'
+import type { UserInfo } from '@/lib/api/api-schema'
 
 const TOKEN_KEY = 'auth_token'
 const USER_INFO_KEY = 'user_info'

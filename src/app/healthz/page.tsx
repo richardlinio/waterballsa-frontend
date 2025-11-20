@@ -3,7 +3,7 @@
 import React from 'react'
 import useSWR from 'swr'
 import { healthApi } from '@/lib/api'
-import type { HealthResponse } from '@/lib/api'
+import type { HealthResponse } from '@/lib/api/api-schema'
 
 const fetcher = async () => {
   const response = await healthApi.checkHealth()
