@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
 import { Button } from '@/components/ui/button'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 import { toast } from 'sonner'
 
 export function Header() {
@@ -23,8 +24,10 @@ export function Header() {
   return (
     <header className="border-b border-gray-800 bg-[#1a1a1a]">
       <div className="flex h-16 items-center justify-between px-6">
-        {/* Left: Logo and Brand */}
-        <Link href="/" className="flex items-center gap-2">
+        {/* Left: Sidebar Trigger + Logo and Brand */}
+        <div className="flex items-center gap-4">
+          <SidebarTrigger className="text-white" />
+          <Link href="/" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600">
             <svg
               viewBox="0 0 24 24"
@@ -62,6 +65,7 @@ export function Header() {
             </span>
           </div>
         </Link>
+        </div>
 
         {/* Center: Course Selector - placeholder for now */}
         <div className="flex-1 px-8">

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 
 export default function HomePage() {
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] flex-col bg-[#0f0f0f] px-8 py-12">
+    <div className="min-h-screen border-t-4 border-t-yellow-500 bg-[#0f0f0f] px-8 py-12">
       {/* Welcome Section */}
       <div className="mb-12">
         <h1 className="mb-4 text-4xl font-bold text-white">

@@ -2,8 +2,9 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Toaster } from '@/components/ui/sonner'
 import { AuthProvider } from '@/contexts/auth-context'
+import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
 import { Header } from '@/components/layout/header'
-import { Sidebar } from '@/components/layout/sidebar'
+import { AppSidebar } from '@/components/layout/sidebar'
 import './globals.css'
 
 const geistSans = Geist({
@@ -29,14 +30,16 @@ export default function RootLayout({
   return (
     <html lang="zh-TW" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-[#0f0f0f] antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-          <Header />
-          <div className="flex">
-            <Sidebar />
-            <main className="ml-48 w-full">{children}</main>
-          </div>
+          <SidebarProvider>
+            <AppSidebar />
+            <SidebarInset>
+              <Header />
+              {children}
+            </SidebarInset>
+          </SidebarProvider>
           <Toaster />
         </AuthProvider>
       </body>
