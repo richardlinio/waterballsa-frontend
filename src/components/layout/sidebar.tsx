@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home,  Trophy,  LayoutDashboard, Album } from 'lucide-react'
+import { Home, Trophy, LayoutDashboard, Album } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -51,10 +51,7 @@ export function AppSidebar() {
 
                 return (
                   <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isActive}
-                    >
+                    <SidebarMenuButton asChild isActive={isActive}>
                       <Link href={item.href}>
                         <Icon className="h-4 w-4" />
                         <span>{item.label}</span>
