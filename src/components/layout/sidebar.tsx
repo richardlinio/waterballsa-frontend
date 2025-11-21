@@ -8,10 +8,12 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
 } from '@/components/ui/sidebar'
+import { Logo } from '@/components/logo'
 
 const navItems = [
   {
@@ -41,6 +43,11 @@ export function AppSidebar() {
 
   return (
     <Sidebar className="border-r bg-sidebar">
+      <SidebarHeader>
+        <Link href="/" className="p-2">
+          <Logo />
+        </Link>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
