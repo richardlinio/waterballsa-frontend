@@ -23,7 +23,7 @@ export default function HomePage() {
 
       {/* Course Cards */}
       <div className="grid gap-6 md:grid-cols-2">
-        {courses.map((course) => (
+        {courses.map(course => (
           <CourseCard key={course.id} course={course} />
         ))}
       </div>
