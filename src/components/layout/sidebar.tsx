@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, BookOpen, Trophy, LayoutGrid, BookText } from 'lucide-react'
+import { Home,  Trophy,  LayoutDashboard, Album } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -22,7 +22,7 @@ const navItems = [
   {
     label: '課程',
     href: '/courses',
-    icon: BookOpen,
+    icon: LayoutDashboard,
   },
   {
     label: '排行榜',
@@ -32,12 +32,7 @@ const navItems = [
   {
     label: '所有單元',
     href: '/units',
-    icon: LayoutGrid,
-  },
-  {
-    label: 'Prompt 寶典',
-    href: '/prompts',
-    icon: BookText,
+    icon: Album,
   },
 ]
 
@@ -59,11 +54,6 @@ export function AppSidebar() {
                     <SidebarMenuButton
                       asChild
                       isActive={isActive}
-                      className={
-                        isActive
-                          ? 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground'
-                          : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
-                      }
                     >
                       <Link href={item.href}>
                         <Icon className="h-4 w-4" />

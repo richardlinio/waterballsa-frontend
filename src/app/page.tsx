@@ -84,10 +84,7 @@ export default function HomePage() {
               用一線認證的時間，成為讓優秀的 Coding 實戰高手
             </p>
             <div className="mb-4 text-sm text-gray-300">
-              <span className="font-semibold text-primary">
-                看完課程介紹
-              </span>
-              ，
+              <span className="font-semibold text-primary">看完課程介紹</span>，
               <span className="font-semibold text-primary">
                 立即折價 3,000 元
               </span>

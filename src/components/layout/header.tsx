@@ -81,10 +81,7 @@ export function Header() {
           {isAuthenticated ? (
             <div className="flex items-center gap-3">
               <span className="text-sm text-gray-300">{user?.username}</span>
-              <Button
-                onClick={handleLogout}
-                variant="outline"
-              >
+              <Button onClick={handleLogout} variant="outline">
                 登出
               </Button>
             </div>
