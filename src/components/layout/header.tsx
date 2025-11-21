@@ -22,7 +22,7 @@ export function Header() {
   }
 
   return (
-    <header className="border-b border-gray-800 bg-[#1a1a1a]">
+    <header className="border-b bg-card">
       <div className="flex h-16 items-center justify-between px-6">
         {/* Left: Sidebar Trigger + Logo and Brand */}
         <div className="flex items-center gap-4">
@@ -70,7 +70,7 @@ export function Header() {
         {/* Center: Course Selector - placeholder for now */}
         <div className="flex-1 px-8">
           <div className="mx-auto max-w-md">
-            <select className="w-full rounded-md border border-gray-700 bg-[#2a2a2a] px-4 py-2 text-sm text-white focus:border-blue-500 focus:outline-none">
+            <select className="w-full rounded-md border bg-background px-4 py-2 text-sm text-foreground focus:border-primary focus:outline-none">
               <option>AI x BDD: 規格驅動全自動開發術</option>
             </select>
           </div>
@@ -84,14 +84,13 @@ export function Header() {
               <Button
                 onClick={handleLogout}
                 variant="outline"
-                className="border-gray-700 bg-transparent text-white hover:bg-gray-800"
               >
                 登出
               </Button>
             </div>
           ) : (
             <Link href="/login">
-              <Button className="bg-yellow-500 text-black hover:bg-yellow-400">
+              <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
                 登入
               </Button>
             </Link>

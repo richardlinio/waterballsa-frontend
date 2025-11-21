@@ -45,7 +45,7 @@ export function AppSidebar() {
   const pathname = usePathname()
 
   return (
-    <Sidebar className="border-r border-gray-800 bg-[#1a1a1a]">
+    <Sidebar className="border-r bg-sidebar">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
@@ -61,8 +61,8 @@ export function AppSidebar() {
                       isActive={isActive}
                       className={
                         isActive
-                          ? 'bg-yellow-500 text-black hover:bg-yellow-500 hover:text-black'
-                          : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                          ? 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground'
+                          : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                       }
                     >
                       <Link href={item.href}>

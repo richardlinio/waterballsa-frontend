@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen border-t-4 border-t-yellow-500 bg-[#0f0f0f] px-8 py-12">
+    <div className="min-h-screen border-t-4 border-t-primary bg-background px-8 py-12">
       {/* Welcome Section */}
       <div className="mb-12">
         <h1 className="mb-4 text-4xl font-bold text-white">
@@ -23,7 +23,7 @@ export default function HomePage() {
       {/* Course Cards */}
       <div className="grid gap-6 md:grid-cols-2">
         {/* Card 1: 軟體設計模式精通之旅 */}
-        <div className="overflow-hidden rounded-lg border border-yellow-500/50 bg-linear-to-br from-[#1a1a1a] to-[#0f0f0f]">
+        <div className="overflow-hidden rounded-lg border border-primary/50 bg-card">
           {/* Card Image */}
           <div className="relative aspect-video bg-linear-to-br from-blue-900/30 to-purple-900/30 p-6">
             <div className="absolute inset-0 flex items-center justify-center">
@@ -76,7 +76,7 @@ export default function HomePage() {
               <h4 className="mb-2 text-xl font-bold text-white">
                 軟體設計模式精通之旅
               </h4>
-              <span className="inline-block rounded bg-yellow-500 px-2 py-1 text-xs font-semibold text-black">
+              <span className="inline-block rounded bg-primary px-2 py-1 text-xs font-semibold text-primary-foreground">
                 水球演
               </span>
             </div>
@@ -84,22 +84,22 @@ export default function HomePage() {
               用一線認證的時間，成為讓優秀的 Coding 實戰高手
             </p>
             <div className="mb-4 text-sm text-gray-300">
-              <span className="font-semibold text-yellow-500">
+              <span className="font-semibold text-primary">
                 看完課程介紹
               </span>
               ，
-              <span className="font-semibold text-yellow-500">
+              <span className="font-semibold text-primary">
                 立即折價 3,000 元
               </span>
             </div>
-            <Button className="w-full bg-yellow-500 text-black hover:bg-yellow-400">
+            <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
               立即購買
             </Button>
           </div>
         </div>
 
         {/* Card 2: AI x BDD */}
-        <div className="overflow-hidden rounded-lg border border-yellow-500/50 bg-linear-to-br from-[#1a1a1a] to-[#0f0f0f]">
+        <div className="overflow-hidden rounded-lg border border-primary/50 bg-card">
           {/* Card Image */}
           <div className="relative aspect-video bg-linear-to-br from-blue-900/30 to-cyan-900/30 p-6">
             <div className="absolute inset-0 flex items-center justify-center">
@@ -144,7 +144,7 @@ export default function HomePage() {
               <h4 className="mb-2 text-xl font-bold text-white">
                 AI x BDD : 規格驅動全自動開發術
               </h4>
-              <span className="inline-block rounded bg-yellow-500 px-2 py-1 text-xs font-semibold text-black">
+              <span className="inline-block rounded bg-primary px-2 py-1 text-xs font-semibold text-primary-foreground">
                 水球演
               </span>
             </div>
@@ -153,7 +153,7 @@ export default function HomePage() {
             </p>
             <Button
               variant="outline"
-              className="w-full border-yellow-500 bg-transparent text-yellow-500 hover:bg-yellow-500/10"
+              className="w-full border-primary bg-transparent text-primary hover:bg-primary/10"
             >
               立即購買
             </Button>
