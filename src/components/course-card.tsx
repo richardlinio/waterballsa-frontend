@@ -9,7 +9,7 @@ interface CourseCardProps {
 
 export function CourseCard({ course }: CourseCardProps) {
   return (
-    <Card className="group flex flex-col overflow-hidden border-2 border-primary/30 bg-card p-0 transition-all hover:border-primary/60">
+    <Card className="group flex flex-col overflow-hidden border-2 border-white/20 bg-card p-0 transition-all hover:border-primary/60">
       {/* Image Header */}
       <div className="relative aspect-video w-full overflow-hidden">
         <Image
@@ -49,11 +49,10 @@ export function CourseCard({ course }: CourseCardProps) {
 
         {/* Button */}
         <Button
-          variant={course.buttonVariant}
           className={
             course.buttonVariant === 'outline'
-              ? 'mt-6 w-full rounded-xl border-2 border-primary bg-transparent py-6 text-base font-semibold text-primary transition-colors hover:bg-primary/10'
-              : 'mt-6 w-full rounded-xl bg-primary py-6 text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/90'
+              ? 'mt-6 w-full rounded-xl border-0 bg-primary py-6 text-base font-semibold text-primary-foreground shadow-none transition-colors hover:bg-primary/90'
+              : 'mt-6 w-full rounded-xl border-2 border-primary/30 bg-transparent py-6 text-base font-semibold text-primary shadow-none transition-colors hover:border-primary hover:bg-primary hover:text-black'
           }
         >
           {course.buttonText}
