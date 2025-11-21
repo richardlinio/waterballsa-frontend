@@ -7,5 +7,6 @@ export interface Course {
   promotion?: string
   buttonText: string
   buttonVariant: 'default' | 'outline'
+  buttonLink: string
   imageUrl: string
 }
