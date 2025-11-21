@@ -5,6 +5,13 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
 import { Button } from '@/components/ui/button'
 import { SidebarTrigger } from '@/components/ui/sidebar'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { toast } from 'sonner'
 
 export function Header() {
@@ -22,57 +29,26 @@ export function Header() {
   }
 
   return (
-    <header className="border-b border-gray-800 bg-[#1a1a1a]">
+    <header className="border-b bg-card">
       <div className="flex h-16 items-center justify-between px-6">
-        {/* Left: Sidebar Trigger + Logo and Brand */}
+        {/* Left: Sidebar Trigger */}
         <div className="flex items-center gap-4">
           <SidebarTrigger className="text-white" />
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                className="h-5 w-5"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 2L2 7L12 12L22 7L12 2Z"
-                  fill="white"
-                  fillOpacity="0.9"
-                />
-                <path
-                  d="M2 17L12 22L22 17"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M2 12L12 17L22 12"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold leading-none text-white">
-                水球軟體學院
-              </span>
-              <span className="text-xs leading-none text-gray-400">
-                WATERBALLSA.TW
-              </span>
-            </div>
-          </Link>
         </div>
 
         {/* Center: Course Selector - placeholder for now */}
         <div className="flex-1 px-8">
           <div className="mx-auto max-w-md">
-            <select className="w-full rounded-md border border-gray-700 bg-[#2a2a2a] px-4 py-2 text-sm text-white focus:border-blue-500 focus:outline-none">
-              <option>AI x BDD: 規格驅動全自動開發術</option>
-            </select>
+            <Select defaultValue="ai-bdd">
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="選擇課程" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ai-bdd">
+                  AI x BDD: 規格驅動全自動開發術
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
@@ -81,17 +57,13 @@ export function Header() {
           {isAuthenticated ? (
             <div className="flex items-center gap-3">
               <span className="text-sm text-gray-300">{user?.username}</span>
-              <Button
-                onClick={handleLogout}
-                variant="outline"
-                className="border-gray-700 bg-transparent text-white hover:bg-gray-800"
-              >
+              <Button onClick={handleLogout} variant="outline">
                 登出
               </Button>
             </div>
           ) : (
             <Link href="/login">
-              <Button className="bg-yellow-500 text-black hover:bg-yellow-400">
+              <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
                 登入
               </Button>
             </Link>

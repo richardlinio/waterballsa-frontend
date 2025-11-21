@@ -2,16 +2,18 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, BookOpen, Trophy, LayoutGrid, BookText } from 'lucide-react'
+import { Home, Trophy, LayoutDashboard, Album } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
 } from '@/components/ui/sidebar'
+import { Logo } from '@/components/logo'
 
 const navItems = [
   {
@@ -22,7 +24,7 @@ const navItems = [
   {
     label: '課程',
     href: '/courses',
-    icon: BookOpen,
+    icon: LayoutDashboard,
   },
   {
     label: '排行榜',
@@ -32,12 +34,7 @@ const navItems = [
   {
     label: '所有單元',
     href: '/units',
-    icon: LayoutGrid,
-  },
-  {
-    label: 'Prompt 寶典',
-    href: '/prompts',
-    icon: BookText,
+    icon: Album,
   },
 ]
 
@@ -45,7 +42,12 @@ export function AppSidebar() {
   const pathname = usePathname()
 
   return (
-    <Sidebar className="border-r border-gray-800 bg-[#1a1a1a]">
+    <Sidebar className="border-r bg-sidebar">
+      <SidebarHeader>
+        <Link href="/" className="p-2">
+          <Logo />
+        </Link>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
@@ -56,15 +58,7 @@ export function AppSidebar() {
 
                 return (
                   <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isActive}
-                      className={
-                        isActive
-                          ? 'bg-yellow-500 text-black hover:bg-yellow-500 hover:text-black'
-                          : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                      }
-                    >
+                    <SidebarMenuButton asChild isActive={isActive}>
                       <Link href={item.href}>
                         <Icon className="h-4 w-4" />
                         <span>{item.label}</span>
