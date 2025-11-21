@@ -9,7 +9,7 @@ interface CourseCardProps {
 
 export function CourseCard({ course }: CourseCardProps) {
   return (
-    <Card className="group flex flex-col overflow-hidden border-2 border-white/20 bg-card p-0 transition-all hover:border-primary/60">
+    <Card className="group flex flex-col overflow-hidden border-2 border-white/20 bg-card p-0 transition-all duration-250 hover:-translate-y-1 hover:scale-102 hover:border-primary/60 hover:bg-primary/10 hover:shadow-2lg hover:shadow-black/30">
       {/* Image Header */}
       <div className="relative aspect-video w-full overflow-hidden">
         <Image
