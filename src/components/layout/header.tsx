@@ -5,6 +5,13 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
 import { Button } from '@/components/ui/button'
 import { SidebarTrigger } from '@/components/ui/sidebar'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { toast } from 'sonner'
 
 export function Header() {
@@ -32,9 +39,16 @@ export function Header() {
         {/* Center: Course Selector - placeholder for now */}
         <div className="flex-1 px-8">
           <div className="mx-auto max-w-md">
-            <select className="w-full rounded-md border bg-background px-4 py-2 text-sm text-foreground focus:border-primary focus:outline-none">
-              <option>AI x BDD: 規格驅動全自動開發術</option>
-            </select>
+            <Select defaultValue="ai-bdd">
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="選擇課程" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ai-bdd">
+                  AI x BDD: 規格驅動全自動開發術
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
