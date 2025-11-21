@@ -1,13 +1,11 @@
 export interface Course {
   id: string
   title: string
-  description: string
+  subtitle: string
   instructor: string
+  description: string
   promotion?: string
   buttonText: string
   buttonVariant: 'default' | 'outline'
-  thumbnail: {
-    gradient: string
-    icon: React.ReactNode
-  }
+  imageUrl: string
 }

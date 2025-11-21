@@ -4,74 +4,24 @@ export const courses: Course[] = [
   {
     id: '1',
     title: '軟體設計模式精通之旅',
-    description: 'AI Top 1% 工程師必備技能，掌握規格驅動的全自動化開發',
-    instructor: '水球演',
-    promotion: '看完課程介紹，立即折價 3,000 元',
-    buttonText: '立即購買',
-    buttonVariant: 'default',
-    thumbnail: {
-      gradient: 'from-blue-900/30 to-purple-900/30',
-      icon: (
-        <svg
-          viewBox="0 0 100 100"
-          className="h-24 w-24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect
-            x="20"
-            y="20"
-            width="25"
-            height="25"
-            fill="#3b82f6"
-            transform="rotate(45 32.5 32.5)"
-          />
-          <rect
-            x="55"
-            y="20"
-            width="25"
-            height="25"
-            fill="#ef4444"
-            transform="rotate(-45 67.5 32.5)"
-          />
-          <rect x="37.5" y="55" width="25" height="25" fill="#f59e0b" />
-        </svg>
-      ),
-    },
+    subtitle: '用一趟旅程，精通一套能落地的高效率設計思路',
+    instructor: '水球潘',
+    description:
+      '用一趟旅程的時間，成為硬核的 Coding 實戰高手',
+    promotion: '看完課程介紹，立刻折價 3,000 元',
+    buttonText: '立刻體驗',
+    buttonVariant: 'outline',
+    imageUrl: 'https://world.waterballsa.tw/world/courses/course_4.png',
   },
   {
     id: '2',
-    title: 'AI x BDD : 規格驅動全自動開發術',
-    description: 'AI Top 1% 工程師必備技能，掌握規格驅動的全自動化開發',
-    instructor: '水球演',
-    buttonText: '立即購買',
-    buttonVariant: 'outline',
-    thumbnail: {
-      gradient: 'from-blue-900/30 to-cyan-900/30',
-      icon: (
-        <svg
-          viewBox="0 0 100 100"
-          className="h-24 w-24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M30 70L50 30L70 70H30Z"
-            fill="none"
-            stroke="#06b6d4"
-            strokeWidth="4"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M40 60L50 40L60 60"
-            fill="none"
-            stroke="#06b6d4"
-            strokeWidth="3"
-            strokeLinejoin="round"
-          />
-          <circle cx="50" cy="50" r="5" fill="#06b6d4" />
-        </svg>
-      ),
-    },
+    title: 'AI x BDD：規格驅動全自動開發術',
+    subtitle: '善用軟體工藝，做到 100% 全自動化、高精準度的 Vibe Coding',
+    instructor: '水球潘',
+    description:
+      'AI Top 1% 工程師必修課，掌握規格驅動的全自動化開發',
+    buttonText: '立刻購買',
+    buttonVariant: 'default',
+    imageUrl: 'https://world.waterballsa.tw/world/courses/course_0.png',
   },
 ]
