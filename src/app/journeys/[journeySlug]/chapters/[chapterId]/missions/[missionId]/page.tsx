@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/auth-context'
 import { VideoPlayer } from '@/components/mission/video-player'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { missionApi } from '@/lib/api'
+import { missionApi, journeyApi } from '@/lib/api'
 import type {
   MissionDetail,
   UserMissionProgress,
@@ -22,6 +22,7 @@ export default function MissionPage() {
   const journeySlug = params.journeySlug as string
   const missionId = parseInt(params.missionId as string)
 
+  const [journeyId, setJourneyId] = useState<number | null>(null)
   const [mission, setMission] = useState<MissionDetail | null>(null)
   const [progress, setProgress] = useState<UserMissionProgress | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -44,10 +45,25 @@ export default function MissionPage() {
         setIsLoading(true)
         setError(null)
 
-        // Fetch mission details
-        const missionResult = await missionApi.getMissionDetail(journeySlug, missionId)
+        // First, get journey ID from slug
+        const journeyResult = await journeyApi.getJourneyBySlug(journeySlug)
+        if (!journeyResult.success) {
+          throw new Error(
+            journeyResult.error?.message || 'Failed to fetch journey'
+          )
+        }
+        const fetchedJourneyId = journeyResult.data.id
+        setJourneyId(fetchedJourneyId)
+
+        // Fetch mission details using journey ID
+        const missionResult = await missionApi.getMissionDetail(
+          fetchedJourneyId,
+          missionId
+        )
         if (!missionResult.success) {
-          throw new Error(missionResult.error?.message || 'Failed to fetch mission')
+          throw new Error(
+            missionResult.error?.message || 'Failed to fetch mission'
+          )
         }
         setMission(missionResult.data)
 
@@ -123,10 +139,10 @@ export default function MissionPage() {
 
   // Handle mission delivery
   const handleDeliverMission = async () => {
-    if (!user || !mission) return
+    if (!user || !mission || !journeyId) return
 
     setIsDelivering(true)
-    const result = await missionApi.deliverMission(journeySlug, missionId)
+    const result = await missionApi.deliverMission(journeyId, missionId)
 
     if (result.success) {
       // Update progress status to DELIVERED

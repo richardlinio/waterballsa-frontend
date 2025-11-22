@@ -14,13 +14,13 @@ import {
 export const missionApi = {
   /**
    * Get mission details
-   * @param journeySlug - Journey slug (URL-friendly identifier)
+   * @param journeyId - Journey ID
    * @param missionId - Mission ID
    * @returns Promise<ApiResponse<MissionDetail>>
    *
    * @example
    * ```typescript
-   * const result = await missionApi.getMissionDetail('software-design-pattern', 42)
+   * const result = await missionApi.getMissionDetail(1, 42)
    * if (result.success) {
    *   console.log('Mission:', result.data)
    * } else {
@@ -29,11 +29,11 @@ export const missionApi = {
    * ```
    */
   getMissionDetail: async (
-    journeySlug: string,
+    journeyId: number,
     missionId: number
   ): Promise<ApiResponse<MissionDetail>> => {
     return apiClient.get<MissionDetail>(
-      `/journeys/${journeySlug}/missions/${missionId}`
+      `/journeys/${journeyId}/missions/${missionId}`
     )
   },
 
@@ -93,13 +93,13 @@ export const missionApi = {
 
   /**
    * Deliver completed mission to receive experience points
-   * @param journeySlug - Journey slug (URL-friendly identifier)
+   * @param journeyId - Journey ID
    * @param missionId - Mission ID
    * @returns Promise<ApiResponse<DeliverResponse>>
    *
    * @example
    * ```typescript
-   * const result = await missionApi.deliverMission('software-design-pattern', 42)
+   * const result = await missionApi.deliverMission(1, 42)
    * if (result.success) {
    *   console.log('Experience gained:', result.data.experienceGained)
    * } else {
@@ -108,11 +108,11 @@ export const missionApi = {
    * ```
    */
   deliverMission: async (
-    journeySlug: string,
+    journeyId: number,
     missionId: number
   ): Promise<ApiResponse<DeliverResponse>> => {
     return apiClient.post<DeliverResponse>(
-      `/journeys/${journeySlug}/missions/${missionId}/deliver`
+      `/journeys/${journeyId}/missions/${missionId}/deliver`
     )
   },
 }
