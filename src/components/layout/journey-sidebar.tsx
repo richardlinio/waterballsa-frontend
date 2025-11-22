@@ -3,7 +3,15 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { ChevronDown, ChevronRight, Play, FileText, HelpCircle, CheckCircle, Lock } from 'lucide-react'
+import {
+  ChevronDown,
+  ChevronRight,
+  Play,
+  FileText,
+  CheckCircle,
+  Lock,
+  ClipboardPen,
+} from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -34,8 +42,8 @@ function getMissionIcon(type: string) {
       return Play
     case 'ARTICLE':
       return FileText
-    case 'SURVEY':
-      return HelpCircle
+    case 'QUESTIONNAIRE':
+      return ClipboardPen
     default:
       return Play
   }
@@ -60,8 +68,14 @@ interface ChapterItemProps {
   currentMissionId: number | null
 }
 
-function ChapterItem({ chapter, journeySlug, currentMissionId }: ChapterItemProps) {
-  const hasCurrentMission = chapter.missions.some(m => m.id === currentMissionId)
+function ChapterItem({
+  chapter,
+  journeySlug,
+  currentMissionId,
+}: ChapterItemProps) {
+  const hasCurrentMission = chapter.missions.some(
+    m => m.id === currentMissionId
+  )
   const [isOpen, setIsOpen] = useState(hasCurrentMission)
 
   return (
@@ -102,7 +116,12 @@ interface MissionItemProps {
   isActive: boolean
 }
 
-function MissionItem({ mission, journeySlug, chapterId, isActive }: MissionItemProps) {
+function MissionItem({
+  mission,
+  journeySlug,
+  chapterId,
+  isActive,
+}: MissionItemProps) {
   const Icon = getMissionIcon(mission.type)
   const statusIcon = getMissionStatusIcon(mission.status, mission.accessLevel)
 
@@ -126,7 +145,9 @@ export function JourneySidebar() {
   const params = useParams()
 
   const journeySlug = params.journeySlug as string
-  const missionId = params.missionId ? parseInt(params.missionId as string) : null
+  const missionId = params.missionId
+    ? parseInt(params.missionId as string)
+    : null
 
   const [journey, setJourney] = useState<JourneyDetail | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -176,7 +197,9 @@ export function JourneySidebar() {
         ) : journey ? (
           <SidebarGroup>
             <SidebarGroupLabel className="px-4 py-2">
-              <span className="truncate text-sm font-semibold">{journey.title}</span>
+              <span className="truncate text-sm font-semibold">
+                {journey.title}
+              </span>
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>

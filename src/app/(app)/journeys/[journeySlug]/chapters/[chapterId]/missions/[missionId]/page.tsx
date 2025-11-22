@@ -116,6 +116,11 @@ export default function MissionPage() {
   const handleVideoComplete = async () => {
     if (!user || !mission) return
 
+    // Don't show toast if already completed or delivered
+    if (progress?.status === 'COMPLETED' || progress?.status === 'DELIVERED') {
+      return
+    }
+
     const videoContent = mission.content.find(c => c.type === 'video')
     const durationSeconds = videoContent?.durationSeconds || 0
 

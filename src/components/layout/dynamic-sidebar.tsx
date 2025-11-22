@@ -14,7 +14,8 @@ export function DynamicSidebar() {
   const pathname = usePathname()
 
   // Check if current path is a mission page
-  const isMissionPage = /\/journeys\/[^/]+\/chapters\/[^/]+\/missions\/[^/]+/.test(pathname)
+  const isMissionPage =
+    /\/journeys\/[^/]+\/chapters\/[^/]+\/missions\/[^/]+/.test(pathname)
 
   if (isMissionPage) {
     return <JourneySidebar />
