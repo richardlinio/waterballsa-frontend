@@ -37,6 +37,22 @@ export type {
   LoginResponse,
   LogoutResponse,
   UserInfo,
+  MissionType,
+  MissionStatus,
+  ContentType,
+  MissionReward,
+  MissionContent,
+  MissionDetail,
+  UserMissionProgress,
+  UpdateProgressRequest,
+  ProgressUpdateResponse,
+  DeliverResponse,
+  AccessLevel,
+  MissionSummary,
+  Chapter,
+  JourneyListItem,
+  JourneyDetail,
+  JourneyListResponse,
 } from '@/lib/api/api-schema'
 
 // Export API client
@@ -45,3 +61,5 @@ export { ApiClient, apiClient, createApiClient } from './core/client'
 // Export service APIs
 export { healthApi } from './services/health'
 export { authApi } from './services/auth'
+export { missionApi } from './services/missions'
+export { journeyApi } from './services/journeys'

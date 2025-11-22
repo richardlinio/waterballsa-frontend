@@ -28,3 +28,27 @@ export type {
 
 // Health types - Health check DTOs
 export type { HealthStatus, HealthResponse } from './health'
+
+// Mission types - Mission and progress tracking DTOs
+export type {
+  MissionType,
+  MissionStatus,
+  ContentType,
+  MissionReward,
+  MissionContent,
+  MissionDetail,
+  UserMissionProgress,
+  UpdateProgressRequest,
+  ProgressUpdateResponse,
+  DeliverResponse,
+} from './mission'
+
+// Journey types - Journey, chapter, and mission summary DTOs
+export type {
+  AccessLevel,
+  MissionSummary,
+  Chapter,
+  JourneyListItem,
+  JourneyDetail,
+  JourneyListResponse,
+} from './journey'

@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Course } from '@/types/course'
 import Image from 'next/image'
+import Link from 'next/link'
 
 interface CourseCardProps {
   course: Course
@@ -49,13 +50,14 @@ export function CourseCard({ course }: CourseCardProps) {
 
         {/* Button */}
         <Button
+          asChild
           className={
             course.buttonVariant === 'outline'
               ? 'mt-6 w-full rounded-xl border-0 bg-primary py-6 text-base font-semibold text-primary-foreground shadow-none transition-colors hover:bg-primary/90'
               : 'mt-6 w-full rounded-xl border-2 border-primary/30 bg-transparent py-6 text-base font-semibold text-primary shadow-none transition-colors hover:border-primary hover:bg-primary hover:text-black'
           }
         >
-          {course.buttonText}
+          <Link href={course.buttonLink}>{course.buttonText}</Link>
         </Button>
       </div>
     </Card>
