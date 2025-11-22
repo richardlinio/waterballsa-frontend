@@ -3,15 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import {
-  ChevronDown,
-  ChevronRight,
-  Play,
-  FileText,
-  CheckCircle,
-  Lock,
-  ClipboardPen,
-} from 'lucide-react'
+import { ChevronDown, ChevronRight, Circle, CheckCircle } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -28,38 +20,23 @@ import {
 } from '@/components/ui/sidebar'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Logo } from '@/components/logo'
-import { journeyApi } from '@/lib/api'
-import type { JourneyDetail, Chapter, MissionSummary } from '@/lib/api'
+import { useJourney } from '@/contexts/journey-context'
+import type { Chapter, MissionSummary } from '@/lib/api'
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
 
-function getMissionIcon(type: string) {
-  switch (type) {
-    case 'VIDEO':
-      return Play
-    case 'ARTICLE':
-      return FileText
-    case 'QUESTIONNAIRE':
-      return ClipboardPen
-    default:
-      return Play
-  }
-}
-
-function getMissionStatusIcon(status: string | null, accessLevel: string) {
+function getMissionStatusIcon(status: string | null) {
   if (status === 'DELIVERED') {
-    return <CheckCircle className="h-3 w-3 text-green-500" />
+    return <CheckCircle className="h-4 w-4 text-green-500" />
   }
   if (status === 'COMPLETED') {
-    return <CheckCircle className="h-3 w-3 text-blue-500" />
+    return <CheckCircle className="h-4 w-4 text-blue-500" />
   }
-  if (accessLevel === 'PURCHASED') {
-    return <Lock className="h-3 w-3 text-gray-500" />
-  }
-  return null
+  // UNCOMPLETED or null - dashed circle
+  return <Circle className="h-4 w-4 text-gray-500" strokeDasharray="3 3" />
 }
 
 interface ChapterItemProps {
@@ -122,8 +99,7 @@ function MissionItem({
   chapterId,
   isActive,
 }: MissionItemProps) {
-  const Icon = getMissionIcon(mission.type)
-  const statusIcon = getMissionStatusIcon(mission.status, mission.accessLevel)
+  const statusIcon = getMissionStatusIcon(mission.status)
 
   return (
     <SidebarMenuSubItem>
@@ -132,9 +108,8 @@ function MissionItem({
           href={`/journeys/${journeySlug}/chapters/${chapterId}/missions/${mission.id}`}
           className="flex items-center gap-2"
         >
-          <Icon className="h-3 w-3 shrink-0" />
-          <span className="flex-1 truncate text-sm">{mission.title}</span>
           {statusIcon}
+          <span className="flex-1 truncate text-sm">{mission.title}</span>
         </Link>
       </SidebarMenuSubButton>
     </SidebarMenuSubItem>
@@ -143,39 +118,18 @@ function MissionItem({
 
 export function JourneySidebar() {
   const params = useParams()
+  const { journey, isLoading, error, fetchJourney } = useJourney()
 
   const journeySlug = params.journeySlug as string
   const missionId = params.missionId
     ? parseInt(params.missionId as string)
     : null
 
-  const [journey, setJourney] = useState<JourneyDetail | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
   useEffect(() => {
-    async function fetchJourney() {
-      if (!journeySlug) return
-
-      try {
-        setIsLoading(true)
-        setError(null)
-
-        const result = await journeyApi.getJourneyBySlug(journeySlug)
-        if (result.success) {
-          setJourney(result.data)
-        } else {
-          setError(result.error?.message || 'Failed to load journey')
-        }
-      } catch {
-        setError('Failed to load journey')
-      } finally {
-        setIsLoading(false)
-      }
+    if (journeySlug && (!journey || journey.slug !== journeySlug)) {
+      fetchJourney(journeySlug)
     }
-
-    fetchJourney()
-  }, [journeySlug])
+  }, [journeySlug, journey, fetchJourney])
 
   return (
     <Sidebar className="border-r bg-sidebar">

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
+import { useJourney } from '@/contexts/journey-context'
 import { VideoPlayer } from '@/components/mission/video-player'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -18,6 +19,7 @@ export default function MissionPage() {
   const params = useParams()
   const router = useRouter()
   const { user, isAuthenticated, isLoading: authLoading } = useAuth()
+  const { updateMissionStatus } = useJourney()
 
   const journeySlug = params.journeySlug as string
   const missionId = parseInt(params.missionId as string)
@@ -132,6 +134,8 @@ export default function MissionPage() {
     )
     if (result.success) {
       setProgress(result.data)
+      // Update sidebar status
+      updateMissionStatus(missionId, result.data.status)
       toast.success('影片已觀看完畢！', {
         description: '您可以點擊「完成任務」按鈕領取獎勵',
       })
@@ -150,6 +154,8 @@ export default function MissionPage() {
     if (result.success) {
       // Update progress status to DELIVERED
       setProgress(prev => (prev ? { ...prev, status: 'DELIVERED' } : null))
+      // Update sidebar status
+      updateMissionStatus(missionId, 'DELIVERED')
 
       toast.success('任務完成！', {
         description: `獲得 ${result.data.experienceGained} 經驗值！目前等級：${result.data.currentLevel}`,
