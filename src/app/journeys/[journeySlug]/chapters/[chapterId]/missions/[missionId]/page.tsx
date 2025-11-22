@@ -22,7 +22,6 @@ export default function MissionPage() {
   const journeySlug = params.journeySlug as string
   const missionId = parseInt(params.missionId as string)
 
-  const [journeyId, setJourneyId] = useState<number | null>(null)
   const [mission, setMission] = useState<MissionDetail | null>(null)
   const [progress, setProgress] = useState<UserMissionProgress | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -53,7 +52,6 @@ export default function MissionPage() {
           )
         }
         const fetchedJourneyId = journeyResult.data.id
-        setJourneyId(fetchedJourneyId)
 
         // Fetch mission details using journey ID
         const missionResult = await missionApi.getMissionDetail(
@@ -139,10 +137,10 @@ export default function MissionPage() {
 
   // Handle mission delivery
   const handleDeliverMission = async () => {
-    if (!user || !mission || !journeyId) return
+    if (!user || !mission) return
 
     setIsDelivering(true)
-    const result = await missionApi.deliverMission(journeyId, missionId)
+    const result = await missionApi.deliverMission(parseInt(user.id), missionId)
 
     if (result.success) {
       // Update progress status to DELIVERED
