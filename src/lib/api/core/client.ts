@@ -37,11 +37,11 @@ export class ApiClient {
       if (!response.ok) {
         const errorData = isJSON
           ? await response.json()
-          : { message: await response.text() }
+          : { error: await response.text() }
         return {
           success: false,
           error: {
-            message: errorData.message || `HTTP error ${response.status}`,
+            message: errorData.error || errorData.message || `HTTP error ${response.status}`,
             status: response.status,
             code: errorData.code,
           },
