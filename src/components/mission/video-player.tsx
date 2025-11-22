@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react'
 import YouTube, { YouTubeEvent } from 'react-youtube'
+import { toast } from 'sonner'
 
 interface VideoPlayerProps {
   videoId: string
@@ -36,20 +37,24 @@ export function VideoPlayer({
     },
   }
 
+  // Save current playback time if valid
+  const saveCurrentProgress = () => {
+    const currentTime = playerRef.current?.getCurrentTime()
+    if (!currentTime || currentTime <= 0) return
+
+    onProgressUpdate(Math.floor(currentTime))
+  }
+
   // Start progress tracking interval
   const startProgressTracking = () => {
     if (progressIntervalRef.current) {
       clearInterval(progressIntervalRef.current) // 防止重複啟動
     }
 
-    progressIntervalRef.current = setInterval(() => {
-      if (playerRef.current) {
-        const currentTime = playerRef.current.getCurrentTime()
-        if (currentTime > 0) {
-          onProgressUpdate(Math.floor(currentTime)) // 無條件捨去小數
-        }
-      }
-    }, 10000) // Every 10 seconds
+    progressIntervalRef.current = setInterval(
+      saveCurrentProgress,
+      PROGRESS_UPDATE_INTERVAL_MS
+    )
   }
 
   // Stop progress tracking interval
@@ -62,18 +67,9 @@ export function VideoPlayer({
 
   // Save progress before page unload
   useEffect(() => {
-    const handleBeforeUnload = () => {
-      if (playerRef.current) {
-        const currentTime = playerRef.current.getCurrentTime()
-        if (currentTime > 0) {
-          onProgressUpdate(Math.floor(currentTime))
-        }
-      }
-    }
-
-    window.addEventListener('beforeunload', handleBeforeUnload)
+    window.addEventListener('beforeunload', saveCurrentProgress)
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload)
+      window.removeEventListener('beforeunload', saveCurrentProgress)
       stopProgressTracking()
     }
   }, [onProgressUpdate])
@@ -87,8 +83,12 @@ export function VideoPlayer({
     startProgressTracking()
   }
 
+  const handlePause = () => {
+    stopProgressTracking()
+    saveCurrentProgress()
+  }
+
   const handleVideoEnd = async () => {
-    console.log('Video ended')
     stopProgressTracking()
 
     // Prevent duplicate completion calls
@@ -102,7 +102,6 @@ export function VideoPlayer({
       onProgressUpdate(durationSeconds)
       // Call completion handler
       onComplete()
-      console.log('Mission completed')
     } catch (error) {
       console.error('Failed to mark mission as completed:', error)
     }
@@ -110,14 +109,14 @@ export function VideoPlayer({
 
   const handleError = (event: { data: number }) => {
     const errorMessages: Record<number, string> = {
-      2: 'Invalid video ID',
-      100: 'Video not found or removed',
-      101: 'Video cannot be embedded',
-      150: 'Video cannot be embedded',
+      2: '影片連結無效',
+      100: '影片不存在或已被移除',
+      101: '此影片無法嵌入播放',
+      150: '此影片無法嵌入播放',
     }
 
-    const message = errorMessages[event.data] || 'Unknown error'
-    console.error('YouTube player error:', message)
+    const message = errorMessages[event.data] || '影片載入失敗，請稍後再試'
+    toast.error(message)
   }
 
   return (
@@ -130,6 +129,7 @@ export function VideoPlayer({
               opts={opts}
               onReady={handleReady}
               onPlay={handlePlay}
+              onPause={handlePause}
               onEnd={handleVideoEnd}
               onError={handleError}
               className="absolute inset-0 h-full w-full"
