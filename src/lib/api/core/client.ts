@@ -41,7 +41,10 @@ export class ApiClient {
         return {
           success: false,
           error: {
-            message: errorData.error || errorData.message || `HTTP error ${response.status}`,
+            message:
+              errorData.error ||
+              errorData.message ||
+              `HTTP error ${response.status}`,
             status: response.status,
             code: errorData.code,
           },
