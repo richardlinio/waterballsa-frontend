@@ -11,6 +11,8 @@ interface VideoPlayerProps {
   onComplete: () => void
 }
 
+const PROGRESS_UPDATE_INTERVAL_MS = 10000 // Update progress every 10 seconds
+
 export function VideoPlayer({
   videoId,
   durationSeconds,
