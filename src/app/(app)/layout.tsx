@@ -2,12 +2,12 @@
 
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
 import { Header } from '@/components/layout/header'
-import { AppSidebar } from '@/components/layout/sidebar'
+import { DynamicSidebar } from '@/components/layout/dynamic-sidebar'
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <DynamicSidebar />
       <SidebarInset>
         <Header />
         {children}
