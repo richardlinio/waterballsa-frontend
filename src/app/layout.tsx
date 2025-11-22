@@ -2,9 +2,6 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Toaster } from '@/components/ui/sonner'
 import { AuthProvider } from '@/contexts/auth-context'
-import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
-import { Header } from '@/components/layout/header'
-import { AppSidebar } from '@/components/layout/sidebar'
 import './globals.css'
 
 const geistSans = Geist({
@@ -33,13 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>
-              <Header />
-              {children}
-            </SidebarInset>
-          </SidebarProvider>
+          {children}
           <Toaster />
         </AuthProvider>
       </body>

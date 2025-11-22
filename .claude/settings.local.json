@@ -13,7 +13,9 @@
       "Bash(npm run test:e2e:*)",
       "Bash(npx playwright test:*)",
       "Bash(cat:*)",
-      "Bash(npm run lint:*)"
+      "Bash(npm run lint:*)",
+      "Bash(mkdir:*)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []
