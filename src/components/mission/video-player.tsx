@@ -13,8 +13,6 @@ interface VideoPlayerProps {
 }
 
 const opts = {
-  height: '480',
-  width: '854',
   playerVars: {
     autoplay: 0,
     controls: 1,
@@ -45,7 +43,7 @@ export function VideoPlayer({
 
   return (
     <div className="video-player-wrapper w-full">
-      <div className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-lg bg-black">
+      <div className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-lg bg-black">
         <div className="relative pb-[56.25%]">
           <div className="absolute inset-0">
             <YouTube
