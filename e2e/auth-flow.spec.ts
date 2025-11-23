@@ -14,7 +14,13 @@ test.describe('Complete Authentication Flow', () => {
     // Step 1: Homepage Visit (Unauthenticated)
     // ===========================
     await test.step('Visit homepage as unauthenticated user', async () => {
+      // Clear all cookies to ensure clean state (fixes flaky test)
+      await context.clearCookies()
+
       await page.goto('/')
+
+      // Wait for page to be fully loaded and hydrated
+      await page.waitForLoadState('networkidle')
 
       // Verify "登入" button is visible
       const loginButton = page.getByRole('link', { name: '登入' })
@@ -30,7 +36,9 @@ test.describe('Complete Authentication Flow', () => {
     // ===========================
     await test.step('Navigate to registration page', async () => {
       // Click "登入" button to go to login page
-      await page.getByRole('link', { name: '登入' }).click()
+      const loginLink = page.getByRole('link', { name: '登入' })
+      await expect(loginLink).toBeVisible()
+      await loginLink.click()
       await expect(page).toHaveURL('/login')
 
       // Click "立即註冊" link
@@ -133,6 +141,9 @@ test.describe('Complete Authentication Flow', () => {
 
       // Navigate back to homepage to verify unauthenticated state
       await page.goto('/')
+
+      // Wait for page to be fully loaded and hydrated
+      await page.waitForLoadState('networkidle')
 
       // Verify "登入" button appears (not "登出")
       await expect(page.getByRole('link', { name: '登入' })).toBeVisible()

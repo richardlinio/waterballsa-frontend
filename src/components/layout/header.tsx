@@ -54,17 +54,26 @@ export function Header() {
         <div className="flex items-center gap-4">
           {isAuthenticated ? (
             <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-300">{user?.username}</span>
-              <Button onClick={handleLogout} variant="outline">
+              <span className="text-sm text-gray-300" data-testid="user-name">
+                {user?.username}
+              </span>
+              <Button
+                onClick={handleLogout}
+                variant="outline"
+                data-testid="logout-button"
+              >
                 登出
               </Button>
             </div>
           ) : (
-            <Link href="/login">
-              <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+            <Button
+              asChild
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              <Link href="/login" data-testid="login-link">
                 登入
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           )}
         </div>
       </div>

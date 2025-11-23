@@ -16,7 +16,14 @@
       "Bash(npm run lint:*)",
       "Bash(mkdir:*)",
       "Bash(ls:*)",
-      "Bash(claude --version:*)"
+      "Bash(claude --version:*)",
+      "Bash(for i in {1..3})",
+      "Bash(do echo \"===== Test Run $i/3 =====\")",
+      "Bash(if [ $PIPESTATUS[0] -eq 0 ])",
+      "Bash(then echo \"✅ Run $i: PASSED\")",
+      "Bash(else echo \"❌ Run $i: FAILED\")",
+      "Bash(fi)",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []
