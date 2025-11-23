@@ -24,6 +24,8 @@ export type {
   UserInfo,
   LoginResponse,
   LogoutResponse,
+  UserRole,
+  UserProfile,
 } from './auth'
 
 // Health types - Health check DTOs
