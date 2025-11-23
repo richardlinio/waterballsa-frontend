@@ -12,7 +12,11 @@
       "Bash(curl:*)",
       "Bash(npm run test:e2e:*)",
       "Bash(npx playwright test:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(npm run lint:*)",
+      "Bash(mkdir:*)",
+      "Bash(ls:*)",
+      "Bash(claude --version:*)"
     ],
     "deny": [],
     "ask": []

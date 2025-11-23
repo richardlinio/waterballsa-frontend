@@ -93,13 +93,13 @@ export const missionApi = {
 
   /**
    * Deliver completed mission to receive experience points
-   * @param journeyId - Journey ID
+   * @param userId - User ID
    * @param missionId - Mission ID
    * @returns Promise<ApiResponse<DeliverResponse>>
    *
    * @example
    * ```typescript
-   * const result = await missionApi.deliverMission(1, 42)
+   * const result = await missionApi.deliverMission(123, 42)
    * if (result.success) {
    *   console.log('Experience gained:', result.data.experienceGained)
    * } else {
@@ -108,11 +108,11 @@ export const missionApi = {
    * ```
    */
   deliverMission: async (
-    journeyId: number,
+    userId: number,
     missionId: number
   ): Promise<ApiResponse<DeliverResponse>> => {
     return apiClient.post<DeliverResponse>(
-      `/journeys/${journeyId}/missions/${missionId}/deliver`
+      `/users/${userId}/missions/${missionId}/progress/deliver`
     )
   },
 }
