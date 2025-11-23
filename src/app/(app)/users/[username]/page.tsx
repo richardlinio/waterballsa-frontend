@@ -66,7 +66,7 @@ export default function ProfilePage() {
         {/* Profile Header */}
         <div className="mb-8 text-center">
           <h1 className="mb-2 text-4xl font-bold text-white">
-            {profile.username} #{profile.id}
+            {profile.username} #{profile.id.toString().padStart(4, '0')}
           </h1>
         </div>
 
