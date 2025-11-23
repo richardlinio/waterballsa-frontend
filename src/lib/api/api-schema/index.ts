@@ -26,6 +26,9 @@ export type {
   LogoutResponse,
 } from './auth'
 
+// User types - User profile and role models
+export type { UserRole, UserProfile } from './user'
+
 // Health types - Health check DTOs
 export type { HealthStatus, HealthResponse } from './health'
 

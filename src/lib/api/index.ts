@@ -37,6 +37,8 @@ export type {
   LoginResponse,
   LogoutResponse,
   UserInfo,
+  UserProfile,
+  UserRole,
   MissionType,
   MissionStatus,
   ContentType,
@@ -63,3 +65,4 @@ export { healthApi } from './services/health'
 export { authApi } from './services/auth'
 export { missionApi } from './services/missions'
 export { journeyApi } from './services/journeys'
+export { userApi } from './services/user'

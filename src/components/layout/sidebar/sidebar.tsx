@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Trophy, LayoutDashboard, Album } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -14,32 +13,13 @@ import {
   SidebarMenuButton,
 } from '@/components/ui/sidebar'
 import { Logo } from '@/components/logo'
-
-const navItems = [
-  {
-    label: '首頁',
-    href: '/',
-    icon: Home,
-  },
-  {
-    label: '課程',
-    href: '/courses',
-    icon: LayoutDashboard,
-  },
-  {
-    label: '排行榜',
-    href: '/leaderboard',
-    icon: Trophy,
-  },
-  {
-    label: '所有單元',
-    href: '/journeys/software-design-pattern',
-    icon: Album,
-  },
-]
+import { useAuth } from '@/contexts/auth-context'
+import { getNavItems } from '@/components/layout/sidebar/navigation'
 
 export function AppSidebar() {
   const pathname = usePathname()
+  const { user } = useAuth()
+  const navItems = getNavItems(user?.username)
 
   return (
     <Sidebar className="border-r bg-sidebar">
