@@ -33,7 +33,7 @@ const navItems = [
   },
   {
     label: '所有單元',
-    href: '/units',
+    href: '/journeys/software-design-pattern',
     icon: Album,
   },
 ]
