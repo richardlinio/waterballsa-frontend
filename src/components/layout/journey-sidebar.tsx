@@ -21,6 +21,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton'
 import { Logo } from '@/components/logo'
 import { useJourney } from '@/contexts/journey-context'
+import { useAuth } from '@/contexts/auth-context'
 import type { Chapter, MissionSummary } from '@/lib/api'
 import {
   Collapsible,
@@ -119,6 +120,7 @@ function MissionItem({
 export function JourneySidebar() {
   const params = useParams()
   const { journey, isLoading, error, fetchJourney } = useJourney()
+  const { user } = useAuth()
 
   const journeySlug = params.journeySlug as string
   const missionId = params.missionId
@@ -127,9 +129,9 @@ export function JourneySidebar() {
 
   useEffect(() => {
     if (journeySlug && (!journey || journey.slug !== journeySlug)) {
-      fetchJourney(journeySlug)
+      fetchJourney(journeySlug, user?.id)
     }
-  }, [journeySlug, journey, fetchJourney])
+  }, [journeySlug, journey, fetchJourney, user?.id])
 
   return (
     <Sidebar className="border-r bg-sidebar">

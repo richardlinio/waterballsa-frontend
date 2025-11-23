@@ -7,14 +7,14 @@ import {
   useCallback,
   type ReactNode,
 } from 'react'
-import { journeyApi } from '@/lib/api'
+import { journeyApi, missionApi } from '@/lib/api'
 import type { JourneyDetail, MissionStatus } from '@/lib/api'
 
 interface JourneyContextType {
   journey: JourneyDetail | null
   isLoading: boolean
   error: string | null
-  fetchJourney: (slug: string) => Promise<void>
+  fetchJourney: (slug: string, userId?: string) => Promise<void>
   updateMissionStatus: (missionId: number, status: MissionStatus) => void
 }
 
@@ -29,7 +29,7 @@ export function JourneyProvider({ children }: JourneyProviderProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchJourney = useCallback(async (slug: string) => {
+  const fetchJourney = useCallback(async (slug: string, userId?: string) => {
     if (!slug) return
 
     try {
@@ -38,7 +38,43 @@ export function JourneyProvider({ children }: JourneyProviderProps) {
 
       const result = await journeyApi.getJourneyBySlug(slug)
       if (result.success) {
-        setJourney(result.data)
+        let journeyData = result.data
+
+        // If userId is provided, fetch progress for all missions and merge into journey
+        if (userId) {
+          const allMissionIds = journeyData.chapters.flatMap(chapter =>
+            chapter.missions.map(mission => mission.id)
+          )
+
+          // Fetch progress for all missions in parallel
+          const progressResults = await Promise.all(
+            allMissionIds.map(missionId =>
+              missionApi.getUserMissionProgress(parseInt(userId), missionId)
+            )
+          )
+
+          // Build missionId -> status map
+          const statusMap = new Map<number, MissionStatus>()
+          progressResults.forEach((progressResult, index) => {
+            if (progressResult.success && progressResult.data.status) {
+              statusMap.set(allMissionIds[index], progressResult.data.status)
+            }
+          })
+
+          // Merge progress status into journey data
+          journeyData = {
+            ...journeyData,
+            chapters: journeyData.chapters.map(chapter => ({
+              ...chapter,
+              missions: chapter.missions.map(mission => ({
+                ...mission,
+                status: statusMap.get(mission.id) ?? mission.status,
+              })),
+            })),
+          }
+        }
+
+        setJourney(journeyData)
       } else {
         setError(result.error?.message || 'Failed to load journey')
       }

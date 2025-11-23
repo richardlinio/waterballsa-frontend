@@ -78,6 +78,10 @@ export function useMission(): UseMissionReturn {
         )
         if (progressResult.success) {
           setProgress(progressResult.data)
+          // Sync status to JourneyContext so sidebar shows correct state
+          if (progressResult.data.status) {
+            updateMissionStatus(missionId, progressResult.data.status)
+          }
         } else {
           // If no progress exists, initialize with default values
           setProgress({
@@ -100,7 +104,7 @@ export function useMission(): UseMissionReturn {
     if (user && !authLoading) {
       fetchMissionData()
     }
-  }, [user, authLoading, journeySlug, missionId])
+  }, [user, authLoading, journeySlug, missionId, updateMissionStatus])
 
   // Handle progress update
   const handleProgressUpdate = async (currentTime: number) => {
