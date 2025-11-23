@@ -1,6 +1,7 @@
 'use client'
 
 import { useMission } from '@/hooks/use-mission'
+import { useVideoProgress } from '@/hooks/use-video-progress'
 import { VideoPlayer } from '@/components/mission/video-player'
 import { MissionHeader } from '@/components/mission/mission-header'
 import { MissionDeliverButton } from '@/components/mission/mission-deliver-button'
@@ -22,6 +23,15 @@ export default function MissionPage() {
     handleDeliverMission,
   } = useMission()
 
+  const videoContent = mission?.content.find(c => c.type === 'video')
+
+  const { isCompleted, playerHandlers } = useVideoProgress({
+    initialProgress: progress?.watchPositionSeconds ?? 0,
+    durationSeconds: videoContent?.durationSeconds ?? 0,
+    onProgressUpdate: handleProgressUpdate,
+    onComplete: handleVideoComplete,
+  })
+
   if (isLoading) {
     return <MissionLoadingSkeleton />
   }
@@ -29,8 +39,6 @@ export default function MissionPage() {
   if (error || !mission) {
     return <MissionErrorState error={error} />
   }
-
-  const videoContent = mission.content.find(c => c.type === 'video')
 
   return (
     <div className="min-h-screen border-t-4 border-t-primary bg-background px-8 py-12">
@@ -41,10 +49,8 @@ export default function MissionPage() {
           <div className="mb-8">
             <VideoPlayer
               videoId={extractYouTubeId(videoContent.url)}
-              durationSeconds={videoContent.durationSeconds || 0}
-              initialProgress={progress?.watchPositionSeconds || 0}
-              onProgressUpdate={handleProgressUpdate}
-              onComplete={handleVideoComplete}
+              isCompleted={isCompleted}
+              {...playerHandlers}
             />
           </div>
         )}

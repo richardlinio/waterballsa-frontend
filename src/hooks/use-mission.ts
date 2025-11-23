@@ -15,7 +15,7 @@ export interface UseMissionReturn {
   isDelivering: boolean
   error: string | null
   handleProgressUpdate: (currentTime: number) => Promise<void>
-  handleVideoComplete: () => Promise<void>
+  handleVideoComplete: () => void
   handleDeliverMission: () => Promise<void>
 }
 
@@ -118,8 +118,8 @@ export function useMission(): UseMissionReturn {
     }
   }
 
-  // Handle video completion
-  const handleVideoComplete = async () => {
+  // Handle video completion (called by useVideoProgress after progress is already updated)
+  const handleVideoComplete = () => {
     if (!user || !mission) return
 
     // Don't show toast if already completed or delivered
@@ -127,25 +127,14 @@ export function useMission(): UseMissionReturn {
       return
     }
 
-    const videoContent = mission.content.find(c => c.type === 'video')
-    const durationSeconds = videoContent?.durationSeconds || 0
+    // Update sidebar status to COMPLETED
+    updateMissionStatus(missionId, 'COMPLETED')
+    // Update local progress state
+    setProgress(prev => (prev ? { ...prev, status: 'COMPLETED' } : null))
 
-    // Update progress to 100%
-    const result = await missionApi.updateMissionProgress(
-      parseInt(user.id),
-      missionId,
-      durationSeconds
-    )
-    if (result.success) {
-      setProgress(result.data)
-      // Update sidebar status
-      updateMissionStatus(missionId, result.data.status)
-      toast.success('影片已觀看完畢！', {
-        description: '您可以點擊「完成任務」按鈕領取獎勵',
-      })
-    } else {
-      console.error('Failed to complete video:', result.error)
-    }
+    toast.success('影片已觀看完畢！', {
+      description: '您可以點擊「完成任務」按鈕領取獎勵',
+    })
   }
 
   // Handle mission delivery
