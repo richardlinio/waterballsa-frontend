@@ -30,6 +30,7 @@ export default function ProfilePage() {
     fetchProfile()
   }, [])
 
+  // Skeleton
   if (isLoading) {
     return (
       <div className="min-h-screen border-t-4 border-t-primary bg-background px-8 py-12">
@@ -42,6 +43,7 @@ export default function ProfilePage() {
     )
   }
 
+  // Error card
   if (error || !profile) {
     return (
       <div className="min-h-screen border-t-4 border-t-primary bg-background px-8 py-12">
