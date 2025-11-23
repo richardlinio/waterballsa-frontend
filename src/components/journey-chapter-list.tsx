@@ -2,13 +2,34 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ChevronDown, ChevronRight, PlayCircle } from 'lucide-react'
+import {
+  ChevronDown,
+  ChevronRight,
+  PlayCircle,
+  FileText,
+  ClipboardList,
+  Lock,
+} from 'lucide-react'
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
-import type { Chapter } from '@/lib/api/api-schema'
+import { Badge } from '@/components/ui/badge'
+import type { Chapter, MissionSummary } from '@/lib/api/api-schema'
+
+function getMissionTypeIcon(type: MissionSummary['type']) {
+  switch (type) {
+    case 'VIDEO':
+      return <PlayCircle className="h-5 w-5 text-muted-foreground" />
+    case 'ARTICLE':
+      return <FileText className="h-5 w-5 text-muted-foreground" />
+    case 'QUESTIONNAIRE':
+      return <ClipboardList className="h-5 w-5 text-muted-foreground" />
+    default:
+      return <PlayCircle className="h-5 w-5 text-muted-foreground" />
+  }
+}
 
 interface JourneyChapterListProps {
   chapters: Chapter[]
@@ -62,10 +83,20 @@ function ChapterCollapsible({ chapter, journeySlug }: ChapterCollapsibleProps) {
                 className="flex items-center justify-between border-b border-border px-6 py-4 last:border-b-0 hover:bg-accent/50"
               >
                 <div className="flex items-center gap-3">
-                  <PlayCircle className="h-5 w-5 text-muted-foreground" />
+                  {getMissionTypeIcon(mission.type)}
                   <span className="text-foreground">{mission.title}</span>
+                  {mission.accessLevel === 'PUBLIC' && (
+                    <Badge variant="secondary" className="text-xs">
+                      試看單元
+                    </Badge>
+                  )}
                 </div>
-                <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                <div className="flex items-center gap-2">
+                  {mission.accessLevel === 'PURCHASED' && (
+                    <Lock className="h-4 w-4 text-muted-foreground" />
+                  )}
+                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                </div>
               </Link>
             ))}
           </div>

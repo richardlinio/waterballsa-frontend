@@ -44,9 +44,7 @@ export function Header() {
                 <SelectValue placeholder="選擇課程" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ai-bdd">
-                  AI x BDD: 規格驅動全自動開發術
-                </SelectItem>
+                <SelectItem value="ai-bdd">軟體設計模式精通之旅</SelectItem>
               </SelectContent>
             </Select>
           </div>
