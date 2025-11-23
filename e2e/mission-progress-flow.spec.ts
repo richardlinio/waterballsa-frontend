@@ -312,7 +312,9 @@ test.describe('Mission Progress Flow', () => {
         await expect(missionLink).toBeVisible()
 
         // Check that dashed circle is gone (no strokeDasharray)
-        const dashedCircleIcon = missionLink.locator('svg[stroke-dasharray="3 3"]')
+        const dashedCircleIcon = missionLink.locator(
+          'svg[stroke-dasharray="3 3"]'
+        )
         await expect(dashedCircleIcon).not.toBeVisible()
 
         // Check that there's an SVG icon (the checkmark should have no stroke-dasharray)
@@ -357,7 +359,9 @@ test.describe('Mission Progress Flow', () => {
         const missionLink = sidebar.locator(`a[href="${MISSION_URL}"]`)
 
         // Check that dashed circle is not showing
-        const dashedCircleIcon = missionLink.locator('svg[stroke-dasharray="3 3"]')
+        const dashedCircleIcon = missionLink.locator(
+          'svg[stroke-dasharray="3 3"]'
+        )
         await expect(dashedCircleIcon).not.toBeVisible()
 
         // Check there's an SVG icon present
@@ -412,9 +416,9 @@ test.describe('Mission Progress Flow', () => {
       // Step 3: Verify delivery success
       await test.step('Verify delivery success toast', async () => {
         // Wait for toast notification showing experience gained
-        await expect(
-          page.getByText(/獲得 \d+ 經驗值/)
-        ).toBeVisible({ timeout: 10000 })
+        await expect(page.getByText(/獲得 \d+ 經驗值/)).toBeVisible({
+          timeout: 10000,
+        })
       })
 
       await test.step('Verify sidebar icon is green checkmark', async () => {
