@@ -49,16 +49,28 @@ export function JourneyProvider({ children }: JourneyProviderProps) {
     }
   }, [])
 
+  /**
+   * 更新指定任務的狀態
+   *
+   * 資料結構: journey → chapters[] → missions[] → status
+   *
+   * 因為 React 狀態需要 immutability，不能直接修改原物件，
+   * 所以必須從最外層（journey）到最內層（mission）逐層建立新物件：
+   * 1. 複製 journey，替換 chapters
+   * 2. 複製每個 chapter，替換 missions
+   * 3. 找到目標 mission 並更新其 status，其餘保持不變
+   */
   const updateMissionStatus = useCallback(
     (missionId: number, status: MissionStatus) => {
       setJourney(prev => {
         if (!prev) return null
 
         return {
-          ...prev,
+          ...prev, // 複製 journey 的其他屬性
           chapters: prev.chapters.map(chapter => ({
-            ...chapter,
+            ...chapter, // 複製 chapter 的其他屬性
             missions: chapter.missions.map(mission =>
+              // 找到目標 mission 則更新 status，否則保持原樣
               mission.id === missionId ? { ...mission, status } : mission
             ),
           })),
