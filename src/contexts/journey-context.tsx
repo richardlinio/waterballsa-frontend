@@ -142,6 +142,7 @@ export function JourneyProvider({ children }: JourneyProviderProps) {
       // This is a background refresh operation and shouldn't disrupt the UI
       console.error('Failed to refresh journey status:', error)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [journey?.id])
 
   const value: JourneyContextType = {

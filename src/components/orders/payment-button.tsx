@@ -47,7 +47,7 @@ export function PaymentButton({
           toast.error(result.error.message || '付款失敗，請稍後再試')
         }
       }
-    } catch (error) {
+    } catch {
       toast.error('付款時發生錯誤，請稍後再試')
     } finally {
       setIsProcessing(false)
