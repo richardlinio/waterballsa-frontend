@@ -84,9 +84,9 @@ export function OrderSummaryCard({
         <div>
           <h3 className="mb-3 font-semibold">課程內容</h3>
           <div className="space-y-3">
-            {order.items.map(item => (
+            {order.items.map((item, index) => (
               <div
-                key={item.id}
+                key={`${item.id}-${index}`}
                 className="flex items-start justify-between rounded-lg border border-border p-3"
               >
                 <div className="flex-1">
