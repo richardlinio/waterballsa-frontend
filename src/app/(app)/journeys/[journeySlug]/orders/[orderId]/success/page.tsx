@@ -15,6 +15,13 @@ import { CheckCircle2 } from 'lucide-react'
 import useSWR from 'swr'
 
 /**
+ * Custom error type with status property
+ */
+interface OrderError extends Error {
+  status?: number
+}
+
+/**
  * Fetcher function for SWR to get order data
  */
 async function fetchOrder(orderId: string): Promise<Order> {
@@ -22,9 +29,9 @@ async function fetchOrder(orderId: string): Promise<Order> {
 
   if (!result.success) {
     // Throw error to trigger SWR's error handling
-    const error = new Error(result.error.message || '載入訂單失敗')
+    const error: OrderError = new Error(result.error.message || '載入訂單失敗')
     // Attach status for custom error handling
-    ;(error as any).status = result.error.status
+    error.status = result.error.status
     throw error
   }
 
@@ -69,7 +76,7 @@ export default function SuccessPage() {
 
   // Handle 404 error (redirect to journey page)
   useEffect(() => {
-    if (error && (error as any).status === 404) {
+    if (error && (error as OrderError).status === 404) {
       toast.error('找不到訂單或無權限查看')
       router.push(`/journeys/${journeySlug}`)
     }
@@ -89,7 +96,8 @@ export default function SuccessPage() {
       hasRefreshedStatus.current = true
       refreshJourneyStatus()
     }
-  }, [order?.status]) // Don't include refreshJourneyStatus in dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order?.status]) // Don't include refreshJourneyStatus to avoid unnecessary re-fetches
 
   const handleStartLearning = () => {
     // Redirect to the first mission of the journey

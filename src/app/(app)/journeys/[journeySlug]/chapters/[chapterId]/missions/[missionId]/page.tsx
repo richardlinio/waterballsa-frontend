@@ -23,11 +23,11 @@ export default function MissionPage() {
     handleDeliverMission,
   } = useMission()
 
-  const videoContent = mission?.content.find(c => c.type === 'video')
+  const videoResource = mission?.resource?.find(r => r.type === 'video')
 
   const { isCompleted, playerHandlers } = useVideoProgress({
     initialProgress: progress?.watchPositionSeconds ?? 0,
-    durationSeconds: videoContent?.durationSeconds ?? 0,
+    durationSeconds: videoResource?.durationSeconds ?? 0,
     onProgressUpdate: handleProgressUpdate,
     onComplete: handleVideoComplete,
   })
@@ -45,10 +45,10 @@ export default function MissionPage() {
       <div className="mx-auto max-w-5xl">
         <MissionHeader mission={mission} />
 
-        {videoContent && mission.type === 'VIDEO' && (
+        {videoResource && mission.type === 'VIDEO' && (
           <div className="mb-8">
             <VideoPlayer
-              videoId={extractYouTubeId(videoContent.url)}
+              videoId={extractYouTubeId(videoResource.resourceUrl)}
               isCompleted={isCompleted}
               {...playerHandlers}
             />

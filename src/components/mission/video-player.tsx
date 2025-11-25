@@ -41,6 +41,17 @@ export function VideoPlayer({
     toast.error(message)
   }
 
+  // Handle empty videoId gracefully
+  if (!videoId || videoId.trim() === '') {
+    return (
+      <div className="video-player-wrapper w-full">
+        <div className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-lg border border-destructive bg-destructive/10 p-8 text-center">
+          <p className="text-destructive">影片 ID 無效，無法載入影片</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="video-player-wrapper w-full">
       <div className="relative mx-auto w-full max-w-6xl overflow-hidden rounded-lg bg-black">

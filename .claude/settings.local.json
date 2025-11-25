@@ -24,7 +24,8 @@
       "Bash(else echo \"❌ Run $i: FAILED\")",
       "Bash(fi)",
       "Bash(done)",
-      "Bash(lsof:*)"
+      "Bash(lsof:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

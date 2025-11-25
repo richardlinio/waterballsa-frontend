@@ -43,7 +43,7 @@ export type {
   MissionStatus,
   ContentType,
   MissionReward,
-  MissionContent,
+  MissionResource,
   MissionDetail,
   UserMissionProgress,
   UpdateProgressRequest,
