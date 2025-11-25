@@ -23,7 +23,8 @@
       "Bash(then echo \"✅ Run $i: PASSED\")",
       "Bash(else echo \"❌ Run $i: FAILED\")",
       "Bash(fi)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(lsof:*)"
     ],
     "deny": [],
     "ask": []
