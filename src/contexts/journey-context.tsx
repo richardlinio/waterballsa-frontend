@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react'
 import { journeyApi, missionApi } from '@/lib/api'
-import type { JourneyDetail, MissionStatus } from '@/lib/api'
+import type { JourneyDetail, MissionStatus, UserStatus } from '@/lib/api'
 
 interface JourneyContextType {
   journey: JourneyDetail | null
@@ -16,6 +16,8 @@ interface JourneyContextType {
   error: string | null
   fetchJourney: (slug: string, userId?: string) => Promise<void>
   updateMissionStatus: (missionId: number, status: MissionStatus) => void
+  refreshJourneyStatus: () => Promise<void>
+  userStatus: UserStatus | null
 }
 
 const JourneyContext = createContext<JourneyContextType | undefined>(undefined)
@@ -28,6 +30,7 @@ export function JourneyProvider({ children }: JourneyProviderProps) {
   const [journey, setJourney] = useState<JourneyDetail | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [userStatus, setUserStatus] = useState<UserStatus | null>(null)
 
   const fetchJourney = useCallback(async (slug: string, userId?: string) => {
     if (!slug) return
@@ -75,6 +78,8 @@ export function JourneyProvider({ children }: JourneyProviderProps) {
         }
 
         setJourney(journeyData)
+        // Extract and set userStatus if available
+        setUserStatus(journeyData.userStatus ?? null)
       } else {
         setError(result.error?.message || 'Failed to load journey')
       }
@@ -116,12 +121,37 @@ export function JourneyProvider({ children }: JourneyProviderProps) {
     []
   )
 
+  /**
+   * 重新取得 journey 的使用者狀態 (userStatus)
+   * 用於訂單建立或付款完成後，重新整理購買狀態
+   */
+  const refreshJourneyStatus = useCallback(async () => {
+    if (!journey) return
+
+    try {
+      const result = await journeyApi.getJourneyById(journey.id)
+      if (result.success) {
+        setUserStatus(result.data.userStatus ?? null)
+        // Also update the journey's userStatus
+        setJourney(prev =>
+          prev ? { ...prev, userStatus: result.data.userStatus } : null
+        )
+      }
+    } catch (error) {
+      // Log error for debugging but don't update global error state
+      // This is a background refresh operation and shouldn't disrupt the UI
+      console.error('Failed to refresh journey status:', error)
+    }
+  }, [journey?.id])
+
   const value: JourneyContextType = {
     journey,
     isLoading,
     error,
     fetchJourney,
     updateMissionStatus,
+    refreshJourneyStatus,
+    userStatus,
   }
 
   return (
