@@ -50,11 +50,19 @@ export type {
   ProgressUpdateResponse,
   DeliverResponse,
   AccessLevel,
+  UserStatus,
   MissionSummary,
   Chapter,
   JourneyListItem,
   JourneyDetail,
   JourneyListResponse,
+  OrderStatus,
+  OrderItem,
+  Order,
+  CreateOrderRequest,
+  CreateOrderResponse,
+  GetOrderResponse,
+  PayOrderResponse,
 } from '@/lib/api/api-schema'
 
 // Export API client
@@ -66,3 +74,4 @@ export { authApi } from './services/auth'
 export { missionApi } from './services/missions'
 export { journeyApi } from './services/journeys'
 export { userApi } from './services/user'
+export { orderApi } from './services/orders'

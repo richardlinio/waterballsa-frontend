@@ -2,9 +2,11 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 // 定義需要登入才能訪問的路徑
-const protectedPaths = [
-  '/profile',
-  // 可以根據需要添加更多 protected routes
+const protectedPaths = ['/profile']
+
+// 定義需要使用正則表達式匹配的 protected paths
+const protectedPathPatterns = [
+  /^\/journeys\/[^/]+\/orders/, // Protect all order routes
 ]
 
 // 定義已登入使用者不應訪問的路徑（如登入、註冊頁面）
@@ -15,7 +17,9 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('auth_token')?.value
 
   // 檢查是否為 protected route
-  const isProtectedPath = protectedPaths.some(path => pathname.startsWith(path))
+  const isProtectedPath =
+    protectedPaths.some(path => pathname.startsWith(path)) ||
+    protectedPathPatterns.some(pattern => pattern.test(pathname))
 
   // 檢查是否為 auth route
   const isAuthPath = authPaths.some(path => pathname.startsWith(path))
@@ -45,6 +49,7 @@ export const config = {
      * - auth routes: 已登入不應訪問（登入、註冊頁面）
      */
     '/profile/:path*',
+    '/journeys/:slug*/orders/:path*',
     '/login',
     '/register',
   ],

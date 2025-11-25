@@ -6,6 +6,12 @@ import type { MissionType, MissionStatus } from './mission'
 
 export type AccessLevel = 'PUBLIC' | 'AUTHENTICATED' | 'PURCHASED'
 
+export interface UserStatus {
+  hasPurchased: boolean
+  hasUnpaidOrder: boolean
+  unpaidOrderId: number | null
+}
+
 export interface MissionSummary {
   id: number
   type: MissionType
@@ -39,6 +45,7 @@ export interface JourneyDetail {
   coverImageUrl: string
   teacherName: string
   chapters: Chapter[]
+  userStatus?: UserStatus // Optional, only present when user is authenticated
 }
 
 export interface JourneyListResponse {
