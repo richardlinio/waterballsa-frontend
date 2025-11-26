@@ -4,8 +4,6 @@ import { useParams, useRouter } from 'next/navigation'
 import { Lock } from 'lucide-react'
 import { useMission } from '@/hooks/use-mission'
 import { useVideoProgress } from '@/hooks/use-video-progress'
-import { useUserPurchase } from '@/contexts/user-purchase-context'
-import { useJourney } from '@/contexts/journey-context'
 import { VideoPlayer } from '@/components/mission/video-player'
 import { MissionHeader } from '@/components/mission/mission-header'
 import { MissionDeliverButton } from '@/components/mission/mission-deliver-button'
@@ -38,7 +36,6 @@ function LockedContentMessage({ journeySlug }: { journeySlug: string }) {
 export default function MissionPage() {
   const params = useParams()
   const journeySlug = params.journeySlug as string
-  const missionId = parseInt(params.missionId as string)
 
   const {
     mission,
@@ -46,13 +43,11 @@ export default function MissionPage() {
     isLoading,
     isDelivering,
     error,
+    isPurchaseRequired,
     handleProgressUpdate,
     handleVideoComplete,
     handleDeliverMission,
   } = useMission()
-
-  const { hasPurchased, isLoading: purchaseLoading } = useUserPurchase()
-  const { journey } = useJourney()
 
   const videoResource = mission?.resource?.find(r => r.type === 'video')
 
@@ -63,24 +58,30 @@ export default function MissionPage() {
     onComplete: handleVideoComplete,
   })
 
-  // Find mission summary from journey to get accessLevel
-  const missionSummary = journey?.chapters
-    .flatMap(chapter => chapter.missions)
-    .find(m => m.id === missionId)
+  // Use isPurchaseRequired from hook
+  const isContentLocked = isPurchaseRequired
 
-  // Check if content is locked
-  const isContentLocked =
-    mission && missionSummary
-      ? missionSummary.accessLevel === 'PURCHASED' &&
-        !hasPurchased(mission.journeyId)
-      : false
-
-  if (isLoading || purchaseLoading) {
+  if (isLoading) {
     return <MissionLoadingSkeleton />
   }
 
-  if (error || !mission) {
+  if (error) {
     return <MissionErrorState error={error} />
+  }
+
+  // Show locked content UI even when mission is null
+  if (isContentLocked) {
+    return (
+      <div className="min-h-screen border-t-4 border-t-primary bg-background px-8 py-12">
+        <div className="mx-auto max-w-5xl">
+          <LockedContentMessage journeySlug={journeySlug} />
+        </div>
+      </div>
+    )
+  }
+
+  if (!mission) {
+    return <MissionErrorState error="找不到課程內容" />
   }
 
   return (
@@ -90,19 +91,15 @@ export default function MissionPage() {
 
         {videoResource && mission.type === 'VIDEO' && (
           <div className="mb-8">
-            {isContentLocked ? (
-              <LockedContentMessage journeySlug={journeySlug} />
-            ) : (
-              <VideoPlayer
-                videoId={extractYouTubeId(videoResource.resourceUrl)}
-                isCompleted={isCompleted}
-                {...playerHandlers}
-              />
-            )}
+            <VideoPlayer
+              videoId={extractYouTubeId(videoResource.resourceUrl)}
+              isCompleted={isCompleted}
+              {...playerHandlers}
+            />
           </div>
         )}
 
-        {!isContentLocked && progress?.status === 'COMPLETED' && (
+        {progress?.status === 'COMPLETED' && (
           <MissionDeliverButton
             expReward={mission.reward.exp}
             isDelivering={isDelivering}
@@ -110,9 +107,7 @@ export default function MissionPage() {
           />
         )}
 
-        {!isContentLocked && progress?.status === 'DELIVERED' && (
-          <MissionDeliveredMessage />
-        )}
+        {progress?.status === 'DELIVERED' && <MissionDeliveredMessage />}
 
         <MissionInfo mission={mission} />
       </div>

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
 import { useJourney } from '@/contexts/journey-context'
+import { useUserPurchase } from '@/contexts/user-purchase-context'
 import { missionApi, journeyApi } from '@/lib/api'
 import type { MissionDetail, UserMissionProgress } from '@/lib/api'
 import { toast } from 'sonner'
@@ -14,6 +15,7 @@ export interface UseMissionReturn {
   isLoading: boolean
   isDelivering: boolean
   error: string | null
+  isPurchaseRequired: boolean
   handleProgressUpdate: (currentTime: number) => Promise<void>
   handleVideoComplete: () => void
   handleDeliverMission: () => Promise<void>
@@ -24,6 +26,7 @@ export function useMission(): UseMissionReturn {
   const router = useRouter()
   const { user, isAuthenticated, isLoading: authLoading } = useAuth()
   const { updateMissionStatus } = useJourney()
+  const { hasPurchased, isLoading: purchaseLoading } = useUserPurchase()
 
   const journeySlug = params.journeySlug as string
   const missionId = parseInt(params.missionId as string)
@@ -33,6 +36,7 @@ export function useMission(): UseMissionReturn {
   const [isLoading, setIsLoading] = useState(true)
   const [isDelivering, setIsDelivering] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [isPurchaseRequired, setIsPurchaseRequired] = useState(false)
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -49,8 +53,9 @@ export function useMission(): UseMissionReturn {
       try {
         setIsLoading(true)
         setError(null)
+        setIsPurchaseRequired(false) // Reset state
 
-        // First, get journey ID from slug
+        // First, get journey ID and mission summaries from slug
         const journeyResult = await journeyApi.getJourneyBySlug(journeySlug)
         if (!journeyResult.success) {
           throw new Error(
@@ -59,7 +64,29 @@ export function useMission(): UseMissionReturn {
         }
         const fetchedJourneyId = journeyResult.data.id
 
-        // Fetch mission details using journey ID
+        // Find mission summary to check access level BEFORE fetching details
+        const missionSummary = journeyResult.data.chapters
+          .flatMap(chapter => chapter.missions)
+          .find(m => m.id === missionId)
+
+        // PRE-CHECK: If content requires purchase and user hasn't purchased
+        if (
+          missionSummary &&
+          missionSummary.accessLevel === 'PURCHASED' &&
+          !hasPurchased(fetchedJourneyId)
+        ) {
+          // Set purchase required state WITHOUT fetching mission details
+          setIsPurchaseRequired(true)
+          setMission(null)
+          setProgress({
+            missionId,
+            status: 'UNCOMPLETED',
+            watchPositionSeconds: 0,
+          })
+          return // Exit early - don't call getMissionDetail API
+        }
+
+        // Only fetch mission details if access is granted
         const missionResult = await missionApi.getMissionDetail(
           fetchedJourneyId,
           missionId
@@ -104,7 +131,14 @@ export function useMission(): UseMissionReturn {
     if (user && !authLoading) {
       fetchMissionData()
     }
-  }, [user, authLoading, journeySlug, missionId, updateMissionStatus])
+  }, [
+    user,
+    authLoading,
+    journeySlug,
+    missionId,
+    updateMissionStatus,
+    hasPurchased,
+  ])
 
   // Handle progress update
   const handleProgressUpdate = async (currentTime: number) => {
@@ -172,9 +206,10 @@ export function useMission(): UseMissionReturn {
   return {
     mission,
     progress,
-    isLoading: authLoading || isLoading,
+    isLoading: authLoading || isLoading || purchaseLoading,
     isDelivering,
     error,
+    isPurchaseRequired,
     handleProgressUpdate,
     handleVideoComplete,
     handleDeliverMission,
