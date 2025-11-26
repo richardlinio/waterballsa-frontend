@@ -48,11 +48,12 @@ export default function OrderCreationPage() {
     const unpaidOrder = getUnpaidOrderForJourney(journey.id)
     const isPurchased = hasPurchased(journey.id)
 
-    // Check if user already has unpaid order - redirect to payment
-    if (unpaidOrder) {
+    // Check if user has UNPAID order (not expired) - redirect to payment
+    if (unpaidOrder && unpaidOrder.status === 'UNPAID') {
       router.push(`/journeys/${journeySlug}/orders/${unpaidOrder.id}`)
       return
     }
+    // If order is EXPIRED, allow creating new order (don't redirect)
 
     // Check if user already purchased - show toast and redirect
     if (isPurchased) {

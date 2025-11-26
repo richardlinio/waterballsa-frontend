@@ -31,6 +31,13 @@ export function OrderSummaryCard({
         </Badge>
       )
     }
+    if (order.status === 'EXPIRED') {
+      return (
+        <Badge variant="destructive" className="bg-red-600 text-white">
+          已過期
+        </Badge>
+      )
+    }
     return (
       <Badge variant="secondary" className="bg-yellow-600 text-white">
         未付款
@@ -62,6 +69,14 @@ export function OrderSummaryCard({
             </span>
           </div>
         )}
+        {variant === 'pending' && order.status === 'EXPIRED' && (
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">已於以下時間過期：</span>
+            <span className="font-semibold text-red-600">
+              {formatDate(order.createdAt + 3 * 24 * 60 * 60 * 1000)}
+            </span>
+          </div>
+        )}
 
         <Separator />
 
@@ -74,6 +89,21 @@ export function OrderSummaryCard({
               </h3>
               <p className="text-sm text-blue-800 dark:text-blue-200">
                 訂單已建立完成，請你於三日內付款。
+              </p>
+            </div>
+            <Separator />
+          </>
+        )}
+
+        {/* Expired Order Notice */}
+        {variant === 'pending' && order.status === 'EXPIRED' && (
+          <>
+            <div className="rounded-lg bg-red-50 p-4 dark:bg-red-950">
+              <h3 className="mb-2 font-semibold text-red-900 dark:text-red-100">
+                訂單已過期
+              </h3>
+              <p className="text-sm text-red-800 dark:text-red-200">
+                此訂單已超過付款期限（三天），無法繼續付款。請返回課程頁面重新建立訂單。
               </p>
             </div>
             <Separator />

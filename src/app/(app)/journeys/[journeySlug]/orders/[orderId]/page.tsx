@@ -85,6 +85,14 @@ export default function PaymentPage() {
     }
   }, [order, journeySlug, orderId, router])
 
+  // Redirect if order is expired
+  useEffect(() => {
+    if (order?.status === 'EXPIRED') {
+      toast.error('此訂單已過期，請重新建立訂單')
+      router.push(`/journeys/${journeySlug}`)
+    }
+  }, [order, journeySlug, router])
+
   if (isLoading) {
     return <PaymentPageSkeleton />
   }
@@ -210,8 +218,10 @@ export default function PaymentPage() {
           </details>
         </div>
 
-        {/* Payment Button */}
-        <PaymentButton orderId={orderId} journeySlug={journeySlug} />
+        {/* Payment Button - only show for unpaid orders */}
+        {order.status === 'UNPAID' && (
+          <PaymentButton orderId={orderId} journeySlug={journeySlug} />
+        )}
 
         {/* Footer Note */}
         <div className="mt-6 rounded-lg bg-muted/50 p-4 text-sm text-muted-foreground">
