@@ -118,7 +118,10 @@ export function useMission(): UseMissionReturn {
     if (result.success) {
       setProgress(result.data)
     } else {
-      console.error('Failed to update progress:', result.error)
+      console.error('Failed to update progress:', result.error?.message)
+      toast.error('進度保存失敗', {
+        description: result.error?.message || '無法保存進度，請檢查網路連線',
+      })
     }
   }
 
@@ -158,7 +161,7 @@ export function useMission(): UseMissionReturn {
         description: `獲得 ${result.data.experienceGained} 經驗值！目前等級：${result.data.currentLevel}`,
       })
     } else {
-      console.error('Failed to deliver mission:', result.error)
+      console.error('Failed to deliver mission:', result.error?.message)
       toast.error('完成任務失敗', {
         description: result.error?.message || '無法完成任務，請稍後再試',
       })

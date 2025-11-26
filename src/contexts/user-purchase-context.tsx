@@ -98,7 +98,10 @@ export function UserPurchaseProvider({ children }: UserPurchaseProviderProps) {
           setUnpaidOrders(unpaid)
         }
       } catch (error) {
-        console.error('Failed to fetch user purchase data:', error)
+        console.error(
+          'Failed to fetch user purchase data:',
+          error instanceof Error ? error.message : String(error)
+        )
         // Keep stale data - don't clear existing state
         if (showLoading) {
           toast.error('載入購買資訊失敗，請檢查網路連線')

@@ -66,7 +66,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       await authApi.logout()
     } catch (error) {
       // Even if API call fails, we should still clear local state
-      console.error('Logout API call failed:', error)
+      console.error(
+        'Logout API call failed:',
+        error instanceof Error ? error.message : String(error)
+      )
     } finally {
       // Always clear local storage and state
       removeToken()

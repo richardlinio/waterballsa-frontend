@@ -51,7 +51,6 @@ interface ChapterItemProps {
   chapter: Chapter
   journeySlug: string
   currentMissionId: number | null
-  journeyId: number
   isPurchased: boolean
 }
 
@@ -59,7 +58,6 @@ function ChapterItem({
   chapter,
   journeySlug,
   currentMissionId,
-  journeyId,
   isPurchased,
 }: ChapterItemProps) {
   const hasCurrentMission = chapter.missions.some(
@@ -187,7 +185,6 @@ export function JourneySidebar() {
                     chapter={chapter}
                     journeySlug={journeySlug}
                     currentMissionId={missionId}
-                    journeyId={journey.id}
                     isPurchased={isPurchased}
                   />
                 ))}
