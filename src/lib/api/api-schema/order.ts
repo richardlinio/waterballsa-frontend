@@ -2,7 +2,7 @@
  * Order-related API types
  */
 
-export type OrderStatus = 'UNPAID' | 'PAID'
+export type OrderStatus = 'UNPAID' | 'PAID' | 'EXPIRED'
 
 export interface OrderItem {
   id: number
@@ -57,4 +57,26 @@ export interface PayOrderResponse {
   price: number
   paidAt: number
   message: string
+}
+
+/**
+ * Simplified order item for list display
+ */
+export interface OrderItemSummary {
+  journeyId: number
+  journeyTitle: string
+}
+
+/**
+ * Order summary for list display
+ */
+export interface OrderSummary {
+  id: number
+  orderNumber: string
+  status: OrderStatus
+  price: number
+  items: OrderItemSummary[]
+  createdAt: number
+  expiredAt: number | null
+  paidAt: number | null
 }

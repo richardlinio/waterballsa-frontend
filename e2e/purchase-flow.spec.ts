@@ -86,10 +86,10 @@ test.describe('Complete Purchase Flow', () => {
    * 流程：訪問課程頁面 → 查看課程資訊
    * 驗證：
    *   - 課程標題、描述正確顯示
-   *   - 顯示「立即購買」按鈕
+   *   - 顯示「立即加入課程」按鈕
    *
    * ### Step 4: 建立訂單流程
-   * 流程：點擊「立即購買」→ 進入訂單建立頁面 → 點擊「建立訂單」
+   * 流程：點擊「立即加入課程」→ 進入訂單建立頁面 → 點擊「建立訂單」
    * 驗證：
    *   - 跳轉到訂單建立頁面
    *   - 顯示課程統計資訊
@@ -119,7 +119,7 @@ test.describe('Complete Purchase Flow', () => {
    * ### Step 8: 驗證購買狀態（防止重複購買）
    * 流程：返回課程頁面 → 嘗試再次訪問訂單建立頁面
    * 驗證：
-   *   - 課程頁面按鈕變為「開始學習」
+   *   - 課程頁面按鈕變為「繼續學習」
    *   - 無法再次建立訂單（顯示已購買提示）
    */
   test.describe.serial('User journey: register to course completion', () => {
@@ -172,8 +172,10 @@ test.describe('Complete Purchase Flow', () => {
       })
 
       await test.step('Verify purchase button is visible', async () => {
-        // Look for "立即購買" button (could be in sidebar or mobile view)
-        const purchaseButton = page.getByRole('button', { name: '立即購買' })
+        // Look for "立即加入課程" button (could be in sidebar or mobile view)
+        const purchaseButton = page.getByRole('button', {
+          name: '立即加入課程',
+        })
         await expect(purchaseButton).toBeVisible()
       })
 
@@ -181,7 +183,9 @@ test.describe('Complete Purchase Flow', () => {
       // Step 4: Create order flow
       // ============================================
       await test.step('Click purchase button', async () => {
-        const purchaseButton = page.getByRole('button', { name: '立即購買' })
+        const purchaseButton = page.getByRole('button', {
+          name: '立即加入課程',
+        })
         await expect(purchaseButton).toBeVisible()
         await purchaseButton.click()
       })
@@ -341,20 +345,22 @@ test.describe('Complete Purchase Flow', () => {
         await page.waitForLoadState('networkidle')
       })
 
-      await test.step('Verify button text changed to "開始學習"', async () => {
-        // The purchase button should now show "開始學習" instead of "立即購買"
+      await test.step('Verify button text changed to "繼續學習"', async () => {
+        // The purchase button should now show "繼續學習" instead of "立即加入課程"
         // Since we're in the same session, login state is maintained
-        const startLearningButton = page.getByRole('button', {
-          name: '開始學習',
+        const continueLearningButton = page.getByRole('button', {
+          name: '繼續學習',
         })
 
         // Wait for the button to appear with updated text
-        await expect(startLearningButton.first()).toBeVisible({
+        await expect(continueLearningButton.first()).toBeVisible({
           timeout: 10000,
         })
 
-        // Verify "立即購買" button is NOT visible
-        const purchaseButton = page.getByRole('button', { name: '立即購買' })
+        // Verify "立即加入課程" button is NOT visible
+        const purchaseButton = page.getByRole('button', {
+          name: '立即加入課程',
+        })
         await expect(purchaseButton).not.toBeVisible()
       })
 

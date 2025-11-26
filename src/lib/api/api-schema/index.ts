@@ -66,4 +66,15 @@ export type {
   CreateOrderResponse,
   GetOrderResponse,
   PayOrderResponse,
+  OrderItemSummary,
+  OrderSummary,
 } from './order'
+
+// User Purchase types - User's purchased journeys and orders
+export type {
+  PurchasedJourney,
+  UserPurchasedJourneysResponse,
+  Pagination,
+  UserOrdersResponse,
+  GetUserOrdersParams,
+} from './user-purchase'
