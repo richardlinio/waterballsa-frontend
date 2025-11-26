@@ -10,10 +10,11 @@ export interface MissionReward {
   exp: number
 }
 
-export interface MissionContent {
+export interface MissionResource {
   id: number
   type: ContentType
-  url: string
+  resourceUrl?: string
+  resourceContent?: string
   durationSeconds?: number // Only for video type
 }
 
@@ -28,7 +29,7 @@ export interface MissionDetail {
   createdAt: number
   videoLength?: string // Format: MM:SS (for VIDEO type only)
   reward: MissionReward
-  content: MissionContent[]
+  resource: MissionResource[]
 }
 
 export interface UserMissionProgress {

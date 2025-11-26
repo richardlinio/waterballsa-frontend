@@ -129,17 +129,17 @@ export function LoginForm() {
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? '登入中...' : '登入'}
         </Button>
-
-        <div className="text-center text-sm text-muted-foreground">
-          還沒有帳號？
-          <Link
-            href="/register"
-            className="ml-1 text-primary underline-offset-4 hover:underline"
-          >
-            立即註冊
-          </Link>
-        </div>
       </form>
+
+      <div className="text-center text-sm text-muted-foreground">
+        還沒有帳號？
+        <Link
+          href="/register"
+          className="ml-1 text-primary underline-offset-4 hover:underline"
+        >
+          立即註冊
+        </Link>
+      </div>
     </Form>
   )
 }

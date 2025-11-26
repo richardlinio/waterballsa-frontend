@@ -38,7 +38,7 @@ export type {
   MissionStatus,
   ContentType,
   MissionReward,
-  MissionContent,
+  MissionResource,
   MissionDetail,
   UserMissionProgress,
   UpdateProgressRequest,
@@ -49,9 +49,21 @@ export type {
 // Journey types - Journey, chapter, and mission summary DTOs
 export type {
   AccessLevel,
+  UserStatus,
   MissionSummary,
   Chapter,
   JourneyListItem,
   JourneyDetail,
   JourneyListResponse,
 } from './journey'
+
+// Order types - Order and purchase flow DTOs
+export type {
+  OrderStatus,
+  OrderItem,
+  Order,
+  CreateOrderRequest,
+  CreateOrderResponse,
+  GetOrderResponse,
+  PayOrderResponse,
+} from './order'

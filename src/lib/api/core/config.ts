@@ -39,7 +39,7 @@ export const defaultConfig: ApiClientConfig = {
     'Content-Type': 'application/json',
   },
   retry: {
-    maxRetries: 3,
+    maxRetries: 0, // Disabled for more predictable behavior during development
     retryDelay: 100,
   },
   interceptors: {

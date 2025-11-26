@@ -12,13 +12,13 @@ interface UserCredentials {
   authToken: string
 }
 
-interface MissionContent {
+interface MissionResource {
   type: string
   durationSeconds?: number
 }
 
 interface MissionDetail {
-  content: MissionContent[]
+  resource: MissionResource[]
 }
 
 /**
@@ -64,7 +64,7 @@ async function getMissionDuration(
     }
   )
   const mission: MissionDetail = await response.json()
-  const videoContent = mission.content.find(c => c.type === 'video')
+  const videoContent = mission.resource.find(c => c.type === 'video')
   return videoContent?.durationSeconds ?? 0
 }
 

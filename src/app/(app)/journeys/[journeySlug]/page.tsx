@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { Globe, Smartphone, Award, Video, Target } from 'lucide-react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { JourneyChapterList } from '@/components/journey-chapter-list'
@@ -11,9 +12,10 @@ import { useAuth } from '@/contexts/auth-context'
 
 export default function JourneyPage() {
   const params = useParams()
+  const router = useRouter()
   const journeySlug = params.journeySlug as string
-  const { journey, isLoading, error, fetchJourney } = useJourney()
-  const { user } = useAuth()
+  const { journey, isLoading, error, fetchJourney, userStatus } = useJourney()
+  const { user, isAuthenticated } = useAuth()
 
   useEffect(() => {
     if (journeySlug && (!journey || journey.slug !== journeySlug)) {
@@ -41,6 +43,47 @@ export default function JourneyPage() {
       acc + chapter.missions.filter(m => m.type === 'VIDEO').length,
     0
   )
+
+  // Handle purchase button click
+  const handlePurchaseClick = () => {
+    if (!isAuthenticated) {
+      // Redirect to login with return URL
+      router.push(`/login?redirect=/journeys/${journeySlug}/orders`)
+      return
+    }
+
+    // Check if user already has unpaid order
+    if (userStatus?.hasUnpaidOrder && userStatus.unpaidOrderId) {
+      // Redirect to existing unpaid order payment page
+      router.push(`/journeys/${journeySlug}/orders/${userStatus.unpaidOrderId}`)
+      return
+    }
+
+    // Check if user already purchased
+    if (userStatus?.hasPurchased) {
+      toast.success('您已經購買此課程')
+      return
+    }
+
+    // Create new order
+    router.push(`/journeys/${journeySlug}/orders`)
+  }
+
+  // Get button text based on user status
+  const getButtonText = () => {
+    if (!isAuthenticated) {
+      return '立即購買'
+    }
+    if (userStatus?.hasPurchased) {
+      return '開始學習'
+    }
+    if (userStatus?.hasUnpaidOrder) {
+      return '前往付款'
+    }
+    return '立即購買'
+  }
+
+  const buttonText = getButtonText()
 
   return (
     <div className="min-h-screen border-t-4 border-t-primary bg-background">
@@ -71,8 +114,11 @@ export default function JourneyPage() {
             </div>
 
             {/* Join Button (Mobile) */}
-            <Button className="mb-8 w-full rounded-lg bg-primary py-6 text-base font-semibold text-primary-foreground hover:bg-primary/90 lg:hidden">
-              立即加入課程
+            <Button
+              onClick={handlePurchaseClick}
+              className="mb-8 w-full rounded-lg bg-primary py-6 text-base font-semibold text-primary-foreground hover:bg-primary/90 lg:hidden"
+            >
+              {buttonText}
             </Button>
 
             {/* Chapters */}
@@ -87,8 +133,11 @@ export default function JourneyPage() {
         <aside className="hidden w-80 shrink-0 border-l border-border px-6 py-12 lg:block">
           <div className="sticky top-24 space-y-6">
             {/* Join Button */}
-            <Button className="w-full rounded-lg bg-primary py-6 text-base font-semibold text-primary-foreground hover:bg-primary/90">
-              立即加入課程
+            <Button
+              onClick={handlePurchaseClick}
+              className="w-full rounded-lg bg-primary py-6 text-base font-semibold text-primary-foreground hover:bg-primary/90"
+            >
+              {buttonText}
             </Button>
 
             {/* Course Features */}
