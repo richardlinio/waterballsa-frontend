@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 // 定義需要登入才能訪問的路徑
-const protectedPaths = ['/profile']
+const protectedPaths = ['/profile', '/orders']
 
 // 定義需要使用正則表達式匹配的 protected paths
 const protectedPathPatterns = [
@@ -49,6 +49,7 @@ export const config = {
      * - auth routes: 已登入不應訪問（登入、註冊頁面）
      */
     '/profile/:path*',
+    '/orders/:path*',
     '/journeys/:slug*/orders/:path*',
     '/login',
     '/register',

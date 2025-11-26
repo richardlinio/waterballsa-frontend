@@ -26,13 +26,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev
 
 # 建置專案
-npm run build
+make build
 
 # 啟動正式環境伺服器
 npm start
 
 # 執行 ESLint 檢查
-npm run lint
+make lint
 ```
 
 ## 專案架構
@@ -57,6 +57,7 @@ src/
 
 1. **路徑別名**: `@/*` 對應到 `./src/*`
 2. **shadcn/ui 設定** (components.json):
+
    - Style: new-york
    - Base Color: slate
    - CSS Variables: 啟用
