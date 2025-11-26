@@ -169,6 +169,7 @@ export default function OrderCreationPage() {
           <JourneyChapterList
             chapters={journey.chapters}
             journeySlug={journeySlug}
+            journeyId={journey.id}
           />
         </div>
 

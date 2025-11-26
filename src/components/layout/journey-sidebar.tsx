@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Lock } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/collapsible'
 import { Logo } from '@/components/logo'
 import { MissionStatusIcon } from '@/components/mission/mission-status-icon'
+import { useUserPurchase } from '@/contexts/user-purchase-context'
 import type { Chapter } from '@/lib/api'
 import { cn } from '@/lib/utils'
 
@@ -30,6 +31,7 @@ interface JourneySidebarProps {
   chapters: Chapter[]
   currentMissionId?: number
   currentChapterId?: number
+  journeyId: number
 }
 
 export function JourneySidebar({
@@ -37,7 +39,11 @@ export function JourneySidebar({
   chapters,
   currentMissionId,
   currentChapterId,
+  journeyId,
 }: JourneySidebarProps) {
+  const { hasPurchased } = useUserPurchase()
+  const isPurchased = hasPurchased(journeyId)
+
   return (
     <Sidebar className="border-r bg-sidebar">
       <SidebarHeader>
@@ -73,6 +79,9 @@ export function JourneySidebar({
                             .map(mission => {
                               const isActive = mission.id === currentMissionId
                               const missionUrl = `/journeys/${journeySlug}/chapters/${chapter.id}/missions/${mission.id}`
+                              const shouldShowLock =
+                                mission.accessLevel === 'PURCHASED' &&
+                                !isPurchased
 
                               return (
                                 <SidebarMenuSubItem key={mission.id}>
@@ -87,9 +96,13 @@ export function JourneySidebar({
                                         isActive && 'font-medium'
                                       )}
                                     >
-                                      <MissionStatusIcon
-                                        status={mission.status}
-                                      />
+                                      {shouldShowLock ? (
+                                        <Lock className="h-4 w-4 text-muted-foreground" />
+                                      ) : (
+                                        <MissionStatusIcon
+                                          status={mission.status}
+                                        />
+                                      )}
                                       <span className="truncate text-sm">
                                         {mission.title}
                                       </span>

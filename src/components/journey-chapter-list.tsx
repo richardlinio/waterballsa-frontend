@@ -16,6 +16,8 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
 import { Badge } from '@/components/ui/badge'
+import { useUserPurchase } from '@/contexts/user-purchase-context'
+import { useAuth } from '@/contexts/auth-context'
 import type { Chapter, MissionSummary } from '@/lib/api/api-schema'
 
 function getMissionTypeIcon(type: MissionSummary['type']) {
@@ -34,11 +36,13 @@ function getMissionTypeIcon(type: MissionSummary['type']) {
 interface JourneyChapterListProps {
   chapters: Chapter[]
   journeySlug: string
+  journeyId: number
 }
 
 export function JourneyChapterList({
   chapters,
   journeySlug,
+  journeyId,
 }: JourneyChapterListProps) {
   return (
     <div className="space-y-4">
@@ -47,6 +51,7 @@ export function JourneyChapterList({
           key={chapter.id}
           chapter={chapter}
           journeySlug={journeySlug}
+          journeyId={journeyId}
         />
       ))}
     </div>
@@ -56,10 +61,19 @@ export function JourneyChapterList({
 interface ChapterCollapsibleProps {
   chapter: Chapter
   journeySlug: string
+  journeyId: number
 }
 
-function ChapterCollapsible({ chapter, journeySlug }: ChapterCollapsibleProps) {
+function ChapterCollapsible({
+  chapter,
+  journeySlug,
+  journeyId,
+}: ChapterCollapsibleProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const { hasPurchased } = useUserPurchase()
+  const { isAuthenticated } = useAuth()
+
+  const isPurchased = isAuthenticated ? hasPurchased(journeyId) : false
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
@@ -92,7 +106,7 @@ function ChapterCollapsible({ chapter, journeySlug }: ChapterCollapsibleProps) {
                   )}
                 </div>
                 <div className="flex items-center gap-2">
-                  {mission.accessLevel === 'PURCHASED' && (
+                  {mission.accessLevel === 'PURCHASED' && !isPurchased && (
                     <Lock className="h-4 w-4 text-muted-foreground" />
                   )}
                   <ChevronRight className="h-5 w-5 text-muted-foreground" />

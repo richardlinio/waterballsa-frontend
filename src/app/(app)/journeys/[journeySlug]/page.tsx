@@ -152,6 +152,7 @@ export default function JourneyPage() {
             <JourneyChapterList
               chapters={journey.chapters}
               journeySlug={journeySlug}
+              journeyId={journey.id}
             />
           </div>
         </div>

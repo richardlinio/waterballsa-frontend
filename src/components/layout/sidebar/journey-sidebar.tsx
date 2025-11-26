@@ -3,7 +3,13 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { ChevronDown, ChevronRight, Circle, CheckCircle } from 'lucide-react'
+import {
+  ChevronDown,
+  ChevronRight,
+  Circle,
+  CheckCircle,
+  Lock,
+} from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -22,6 +28,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Logo } from '@/components/logo'
 import { useJourney } from '@/contexts/journey-context'
 import { useAuth } from '@/contexts/auth-context'
+import { useUserPurchase } from '@/contexts/user-purchase-context'
 import type { Chapter, MissionSummary } from '@/lib/api'
 import {
   Collapsible,
@@ -44,12 +51,16 @@ interface ChapterItemProps {
   chapter: Chapter
   journeySlug: string
   currentMissionId: number | null
+  journeyId: number
+  isPurchased: boolean
 }
 
 function ChapterItem({
   chapter,
   journeySlug,
   currentMissionId,
+  journeyId,
+  isPurchased,
 }: ChapterItemProps) {
   const hasCurrentMission = chapter.missions.some(
     m => m.id === currentMissionId
@@ -78,6 +89,7 @@ function ChapterItem({
                 journeySlug={journeySlug}
                 chapterId={chapter.id}
                 isActive={mission.id === currentMissionId}
+                isPurchased={isPurchased}
               />
             ))}
           </SidebarMenuSub>
@@ -92,6 +104,7 @@ interface MissionItemProps {
   journeySlug: string
   chapterId: number
   isActive: boolean
+  isPurchased: boolean
 }
 
 function MissionItem({
@@ -99,8 +112,14 @@ function MissionItem({
   journeySlug,
   chapterId,
   isActive,
+  isPurchased,
 }: MissionItemProps) {
-  const statusIcon = getMissionStatusIcon(mission.status)
+  const shouldShowLock = mission.accessLevel === 'PURCHASED' && !isPurchased
+  const statusIcon = shouldShowLock ? (
+    <Lock className="h-4 w-4 text-muted-foreground" />
+  ) : (
+    getMissionStatusIcon(mission.status)
+  )
 
   return (
     <SidebarMenuSubItem>
@@ -121,11 +140,14 @@ export function JourneySidebar() {
   const params = useParams()
   const { journey, isLoading, error, fetchJourney } = useJourney()
   const { user } = useAuth()
+  const { hasPurchased } = useUserPurchase()
 
   const journeySlug = params.journeySlug as string
   const missionId = params.missionId
     ? parseInt(params.missionId as string)
     : null
+
+  const isPurchased = journey ? hasPurchased(journey.id) : false
 
   useEffect(() => {
     if (journeySlug && (!journey || journey.slug !== journeySlug)) {
@@ -165,6 +187,8 @@ export function JourneySidebar() {
                     chapter={chapter}
                     journeySlug={journeySlug}
                     currentMissionId={missionId}
+                    journeyId={journey.id}
+                    isPurchased={isPurchased}
                   />
                 ))}
               </SidebarMenu>

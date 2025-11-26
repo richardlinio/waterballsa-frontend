@@ -26,7 +26,8 @@
       "Bash(done)",
       "Bash(lsof:*)",
       "Bash(npx tsc:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []
