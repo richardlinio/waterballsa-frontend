@@ -21,11 +21,11 @@ export const OTHER_NAV_ITEMS: NavItem[] = [
     href: '/journeys/software-design-pattern',
     icon: Album,
   },
-  {
-    label: '排行榜',
-    href: '/leaderboard',
-    icon: Trophy,
-  },
+  // {
+  //   label: '排行榜',
+  //   href: '/leaderboard',
+  //   icon: Trophy,
+  // },
 ]
 
 /**
