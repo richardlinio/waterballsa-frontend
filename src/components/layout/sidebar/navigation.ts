@@ -1,4 +1,4 @@
-import { Home, Trophy, Album, UserPen } from 'lucide-react'
+import { Home, Trophy, Album, UserPen, Receipt } from 'lucide-react'
 import type { NavItem } from '@/types/navigation'
 
 /**
@@ -38,12 +38,22 @@ export const getProfileNavItem = (username: string): NavItem => ({
 })
 
 /**
+ * 取得訂單管理導航項目
+ */
+export const getOrderManagementNavItem = (): NavItem => ({
+  label: '訂單管理',
+  href: '/orders',
+  icon: Receipt,
+})
+
+/**
  * 取得完整導航項目列表
  * @param username - 使用者名稱 (選填)
  * @returns 導航項目陣列
  */
 export const getNavItems = (username?: string): NavItem[] => {
   const profileItem = username ? [getProfileNavItem(username)] : []
+  const orderItem = username ? [getOrderManagementNavItem()] : []
 
-  return [...BASE_NAV_ITEMS, ...profileItem, ...OTHER_NAV_ITEMS]
+  return [...BASE_NAV_ITEMS, ...profileItem, ...orderItem, ...OTHER_NAV_ITEMS]
 }
