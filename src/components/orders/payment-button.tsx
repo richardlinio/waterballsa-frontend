@@ -43,6 +43,10 @@ export function PaymentButton({
           // Order not found or no permission
           toast.error('找不到訂單或無權限')
           router.push(`/journeys/${journeySlug}`)
+        } else if (result.error.status === 410 || result.error.status === 400) {
+          // Order expired
+          toast.error('訂單已過期，請重新建立訂單')
+          router.push(`/journeys/${journeySlug}`)
         } else {
           toast.error(result.error.message || '付款失敗，請稍後再試')
         }

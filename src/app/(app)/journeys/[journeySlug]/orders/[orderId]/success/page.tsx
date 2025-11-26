@@ -92,6 +92,14 @@ export default function SuccessPage() {
     }
   }, [order?.status, journeySlug, orderId, router])
 
+  // Redirect if order is expired
+  useEffect(() => {
+    if (order?.status === 'EXPIRED') {
+      toast.error('此訂單已過期')
+      router.push(`/journeys/${journeySlug}`)
+    }
+  }, [order?.status, journeySlug, router])
+
   // Refresh purchase status once when order is confirmed as paid
   useEffect(() => {
     if (order?.status === 'PAID' && !hasRefreshedStatus.current) {
