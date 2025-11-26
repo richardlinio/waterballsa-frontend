@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
 import { useJourney } from '@/contexts/journey-context'
+import { useUserPurchase } from '@/contexts/user-purchase-context'
 import { orderApi } from '@/lib/api'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
@@ -18,7 +19,8 @@ export default function OrderCreationPage() {
   const router = useRouter()
   const journeySlug = params.journeySlug as string
   const { isAuthenticated, user } = useAuth()
-  const { journey, fetchJourney, userStatus, isLoading } = useJourney()
+  const { journey, fetchJourney, isLoading } = useJourney()
+  const { hasPurchased, getUnpaidOrderForJourney } = useUserPurchase()
   const [isCreating, setIsCreating] = useState(false)
   const orderCreationAttempted = useRef(false)
 
@@ -43,19 +45,29 @@ export default function OrderCreationPage() {
     if (orderCreationAttempted.current) return
     orderCreationAttempted.current = true
 
+    const unpaidOrder = getUnpaidOrderForJourney(journey.id)
+    const isPurchased = hasPurchased(journey.id)
+
     // Check if user already has unpaid order - redirect to payment
-    if (userStatus?.hasUnpaidOrder && userStatus.unpaidOrderId) {
-      router.push(`/journeys/${journeySlug}/orders/${userStatus.unpaidOrderId}`)
+    if (unpaidOrder) {
+      router.push(`/journeys/${journeySlug}/orders/${unpaidOrder.id}`)
       return
     }
 
     // Check if user already purchased - show toast and redirect
-    if (userStatus?.hasPurchased) {
+    if (isPurchased) {
       toast.error('你已經購買此課程')
       router.push(`/journeys/${journeySlug}`)
       return
     }
-  }, [journey, isAuthenticated, userStatus, journeySlug, router])
+  }, [
+    journey,
+    isAuthenticated,
+    journeySlug,
+    router,
+    hasPurchased,
+    getUnpaidOrderForJourney,
+  ])
 
   const handleCreateOrder = async () => {
     if (!journey || isCreating) return

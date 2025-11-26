@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
 import { useJourney } from '@/contexts/journey-context'
+import { useUserPurchase } from '@/contexts/user-purchase-context'
 import { orderApi } from '@/lib/api'
 import type { Order } from '@/lib/api'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -44,7 +45,8 @@ export default function SuccessPage() {
   const journeySlug = params.journeySlug as string
   const orderId = params.orderId as string
   const { isAuthenticated } = useAuth()
-  const { journey, refreshJourneyStatus } = useJourney()
+  const { journey } = useJourney()
+  const { invalidateAndRefresh } = useUserPurchase()
   const hasRefreshedStatus = useRef(false)
 
   // Use SWR for data fetching
@@ -90,14 +92,14 @@ export default function SuccessPage() {
     }
   }, [order?.status, journeySlug, orderId, router])
 
-  // Refresh journey status once when order is confirmed as paid
+  // Refresh purchase status once when order is confirmed as paid
   useEffect(() => {
     if (order?.status === 'PAID' && !hasRefreshedStatus.current) {
       hasRefreshedStatus.current = true
-      refreshJourneyStatus()
+      invalidateAndRefresh()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order?.status]) // Don't include refreshJourneyStatus to avoid unnecessary re-fetches
+  }, [order?.status]) // Don't include invalidateAndRefresh to avoid unnecessary re-fetches
 
   const handleStartLearning = () => {
     // Redirect to the first mission of the journey

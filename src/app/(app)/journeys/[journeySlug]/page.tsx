@@ -3,19 +3,24 @@
 import { useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { Globe, Smartphone, Award, Video, Target } from 'lucide-react'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { JourneyChapterList } from '@/components/journey-chapter-list'
 import { useJourney } from '@/contexts/journey-context'
 import { useAuth } from '@/contexts/auth-context'
+import { useUserPurchase } from '@/contexts/user-purchase-context'
 
 export default function JourneyPage() {
   const params = useParams()
   const router = useRouter()
   const journeySlug = params.journeySlug as string
-  const { journey, isLoading, error, fetchJourney, userStatus } = useJourney()
+  const { journey, isLoading, error, fetchJourney } = useJourney()
   const { user, isAuthenticated } = useAuth()
+  const {
+    hasPurchased,
+    getUnpaidOrderForJourney,
+    isLoading: purchaseLoading,
+  } = useUserPurchase()
 
   useEffect(() => {
     if (journeySlug && (!journey || journey.slug !== journeySlug)) {
@@ -23,7 +28,7 @@ export default function JourneyPage() {
     }
   }, [journeySlug, journey, fetchJourney, user?.id])
 
-  if (isLoading) {
+  if (isLoading || purchaseLoading) {
     return <JourneyLoadingSkeleton />
   }
 
@@ -37,12 +42,33 @@ export default function JourneyPage() {
     )
   }
 
+  // Use UserPurchaseContext for purchase status
+  const isPurchased = isAuthenticated ? hasPurchased(journey.id) : false
+  const unpaidOrder = isAuthenticated
+    ? getUnpaidOrderForJourney(journey.id)
+    : null
+
   // Count total videos and missions
   const totalVideos = journey.chapters.reduce(
     (acc, chapter) =>
       acc + chapter.missions.filter(m => m.type === 'VIDEO').length,
     0
   )
+
+  // Navigate to first mission
+  const handleStartLearning = () => {
+    if (journey.chapters.length > 0) {
+      const firstChapter = journey.chapters[0]
+      if (firstChapter.missions.length > 0) {
+        const firstMission = firstChapter.missions[0]
+        router.push(
+          `/journeys/${journeySlug}/chapters/${firstChapter.id}/missions/${firstMission.id}`
+        )
+        return
+      }
+    }
+    // Fallback: stay on journey page if no missions
+  }
 
   // Handle purchase button click
   const handlePurchaseClick = () => {
@@ -53,15 +79,16 @@ export default function JourneyPage() {
     }
 
     // Check if user already has unpaid order
-    if (userStatus?.hasUnpaidOrder && userStatus.unpaidOrderId) {
+    if (unpaidOrder) {
       // Redirect to existing unpaid order payment page
-      router.push(`/journeys/${journeySlug}/orders/${userStatus.unpaidOrderId}`)
+      router.push(`/journeys/${journeySlug}/orders/${unpaidOrder.id}`)
       return
     }
 
     // Check if user already purchased
-    if (userStatus?.hasPurchased) {
-      toast.success('您已經購買此課程')
+    if (isPurchased) {
+      // Navigate to first mission
+      handleStartLearning()
       return
     }
 
@@ -72,15 +99,15 @@ export default function JourneyPage() {
   // Get button text based on user status
   const getButtonText = () => {
     if (!isAuthenticated) {
-      return '立即購買'
+      return '立即加入課程'
     }
-    if (userStatus?.hasPurchased) {
-      return '開始學習'
+    if (isPurchased) {
+      return '繼續學習'
     }
-    if (userStatus?.hasUnpaidOrder) {
+    if (unpaidOrder) {
       return '前往付款'
     }
-    return '立即購買'
+    return '立即加入課程'
   }
 
   const buttonText = getButtonText()

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Toaster } from '@/components/ui/sonner'
 import { AuthProvider } from '@/contexts/auth-context'
+import { UserPurchaseProvider } from '@/contexts/user-purchase-context'
 import { SWRProvider } from '@/providers/swr-provider'
 import './globals.css'
 
@@ -32,8 +33,10 @@ export default function RootLayout({
       >
         <SWRProvider>
           <AuthProvider>
-            {children}
-            <Toaster />
+            <UserPurchaseProvider>
+              {children}
+              <Toaster />
+            </UserPurchaseProvider>
           </AuthProvider>
         </SWRProvider>
       </body>

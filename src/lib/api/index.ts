@@ -63,6 +63,13 @@ export type {
   CreateOrderResponse,
   GetOrderResponse,
   PayOrderResponse,
+  OrderItemSummary,
+  OrderSummary,
+  PurchasedJourney,
+  UserPurchasedJourneysResponse,
+  Pagination,
+  UserOrdersResponse,
+  GetUserOrdersParams,
 } from '@/lib/api/api-schema'
 
 // Export API client
@@ -75,3 +82,4 @@ export { missionApi } from './services/missions'
 export { journeyApi } from './services/journeys'
 export { userApi } from './services/user'
 export { orderApi } from './services/orders'
+export { userPurchaseApi } from './services/user-purchase'
