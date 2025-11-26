@@ -40,10 +40,14 @@ export function OrderListCard({ order, onClick }: OrderListCardProps) {
   }
 
   const getNotes = () => {
+    if (order.status === 'PAID') {
+      return '付款完成'
+    }
     if (order.status === 'EXPIRED') {
       return '期限内未完成付款'
     }
-    if (order.status === 'UNPAID' && order.expiredAt) {
+    if (order.status === 'UNPAID') {
+      if (!order.expiredAt) return ''
       const deadline = order.expiredAt
       const now = Date.now()
       const daysLeft = Math.ceil((deadline - now) / (24 * 60 * 60 * 1000))
@@ -52,7 +56,7 @@ export function OrderListCard({ order, onClick }: OrderListCardProps) {
       }
       return '即將過期'
     }
-    return '付款完成'
+    return ''
   }
 
   // Get the first course name for display
@@ -64,20 +68,20 @@ export function OrderListCard({ order, onClick }: OrderListCardProps) {
       onClick={onClick}
     >
       <div className="p-6">
-        {/* Header row with order number, payment date, and course name */}
-        <div className="mb-4 grid grid-cols-3 gap-4 text-sm">
+        {/* Metadata section - single column layout */}
+        <div className="mb-4 space-y-3">
           <div>
-            <div className="mb-1 text-muted-foreground">訂單編號</div>
+            <div className="mb-1 text-sm text-muted-foreground">訂單編號</div>
             <div className="font-mono font-semibold">{order.orderNumber}</div>
           </div>
           <div>
-            <div className="mb-1 text-muted-foreground">付款日期</div>
+            <div className="mb-1 text-sm text-muted-foreground">付款日期</div>
             <div className="font-semibold">
               {order.paidAt ? formatDate(order.paidAt) : ''}
             </div>
           </div>
           <div>
-            <div className="mb-1 text-muted-foreground">課程名稱</div>
+            <div className="mb-1 text-sm text-muted-foreground">課程名稱</div>
             <div className="font-semibold">{courseName}</div>
           </div>
         </div>

@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
+import { useUserPurchase } from '@/contexts/user-purchase-context'
 import { userPurchaseApi, journeyApi } from '@/lib/api'
 import useSWR from 'swr'
 import { Receipt } from 'lucide-react'
@@ -34,7 +35,8 @@ async function fetchUserOrders(
 
 export default function OrdersPage() {
   const router = useRouter()
-  const { user, isAuthenticated } = useAuth()
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth()
+  const { isRefreshing } = useUserPurchase()
 
   // TODO: Pagination not implemented yet
   // Future enhancement: Add pagination controls when needed
@@ -64,10 +66,17 @@ export default function OrdersPage() {
 
   // Redirect to login if not authenticated
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!authLoading && !isAuthenticated) {
       router.push('/login?redirect=/orders')
     }
-  }, [isAuthenticated, router])
+  }, [authLoading, isAuthenticated, router])
+
+  // Sync with UserPurchaseContext - refresh orders when purchase status changes
+  useEffect(() => {
+    if (isRefreshing) {
+      mutate()
+    }
+  }, [isRefreshing, mutate])
 
   // Handle order click - navigate to payment page
   const handleOrderClick = async (order: OrderSummary) => {
