@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
 import { useJourney } from '@/contexts/journey-context'
 import { useUserPurchase } from '@/contexts/user-purchase-context'
-import { missionApi, journeyApi } from '@/lib/api'
+import { missionApi } from '@/lib/api'
 import type { MissionDetail, UserMissionProgress } from '@/lib/api'
 import { toast } from 'sonner'
 
@@ -25,11 +25,14 @@ export function useMission(): UseMissionReturn {
   const params = useParams()
   const router = useRouter()
   const { user, isAuthenticated, isLoading: authLoading } = useAuth()
-  const { updateMissionStatus } = useJourney()
+  const { journey, updateMissionStatus } = useJourney()
   const { hasPurchased, isLoading: purchaseLoading } = useUserPurchase()
 
-  const journeySlug = params.journeySlug as string
   const missionId = parseInt(params.missionId as string)
+
+  // Extract journeyId to use as dependency instead of journey object
+  // This prevents re-fetching on every journey object reference change
+  const journeyId = journey?.id
 
   const [mission, setMission] = useState<MissionDetail | null>(null)
   const [progress, setProgress] = useState<UserMissionProgress | null>(null)
@@ -48,24 +51,18 @@ export function useMission(): UseMissionReturn {
   // Fetch mission details and user progress
   useEffect(() => {
     async function fetchMissionData() {
-      if (!user) return
+      if (!user || !journey || !journeyId) return
 
       try {
         setIsLoading(true)
         setError(null)
         setIsPurchaseRequired(false) // Reset state
 
-        // First, get journey ID and mission summaries from slug
-        const journeyResult = await journeyApi.getJourneyBySlug(journeySlug)
-        if (!journeyResult.success) {
-          throw new Error(
-            journeyResult.error?.message || 'Failed to fetch journey'
-          )
-        }
-        const fetchedJourneyId = journeyResult.data.id
+        // Use journey data from context instead of fetching again
+        const fetchedJourneyId = journeyId
 
         // Find mission summary to check access level BEFORE fetching details
-        const missionSummary = journeyResult.data.chapters
+        const missionSummary = journey.chapters
           .flatMap(chapter => chapter.missions)
           .find(m => m.id === missionId)
 
@@ -128,13 +125,15 @@ export function useMission(): UseMissionReturn {
       }
     }
 
-    if (user && !authLoading) {
+    if (user && !authLoading && journeyId) {
       fetchMissionData()
     }
+    // We intentionally use journeyId instead of journey to avoid re-fetching on every journey object reference change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     user,
     authLoading,
-    journeySlug,
+    journeyId,
     missionId,
     updateMissionStatus,
     hasPurchased,
