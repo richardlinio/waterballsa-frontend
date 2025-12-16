@@ -27,7 +27,8 @@
       "Bash(lsof:*)",
       "Bash(npx tsc:*)",
       "Bash(rm:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []
