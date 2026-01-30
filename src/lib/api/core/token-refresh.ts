@@ -1,4 +1,4 @@
-import { setToken, setUserInfo, removeToken, removeUserInfo } from '@/lib/auth'
+import { setToken, setUserInfo, emitLogout } from '@/lib/auth'
 import type { RefreshResponse } from '@/lib/api/api-schema/auth'
 
 /**
@@ -55,7 +55,8 @@ class RefreshManager {
 
       if (!response.ok) {
         // Refresh failed (likely refresh token expired)
-        this.clearAuthState()
+        // Emit logout event - AuthContext will handle clearing state and redirect
+        emitLogout()
         return false
       }
 
@@ -68,17 +69,10 @@ class RefreshManager {
       return true
     } catch (error) {
       console.error('Token refresh failed:', error)
-      this.clearAuthState()
+      // Emit logout event - AuthContext will handle clearing state and redirect
+      emitLogout()
       return false
     }
-  }
-
-  /**
-   * Clear all authentication state
-   */
-  private clearAuthState(): void {
-    removeToken()
-    removeUserInfo()
   }
 
   /**

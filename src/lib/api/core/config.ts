@@ -38,7 +38,8 @@ const defaultResponseInterceptor = async <T>(
       }
     }
 
-    // Refresh failed - let the error propagate to useApi hook for logout
+    // Refresh failed - logout event already emitted by RefreshManager
+    // AuthContext will handle logout and redirect
   }
 
   return response
