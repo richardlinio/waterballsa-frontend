@@ -51,7 +51,7 @@ async function loginUser(
 async function setAuthCookies(context: any, credentials: UserCredentials) {
   await context.addCookies([
     {
-      name: 'auth_token',
+      name: 'access_token',
       value: credentials.authToken,
       domain: 'localhost',
       path: '/',

@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 import type { UserInfo } from '@/lib/api/api-schema'
 
-const TOKEN_KEY = 'auth_token'
+const TOKEN_KEY = 'access_token'
 const USER_INFO_KEY = 'user_info'
 const TOKEN_EXPIRY_DAYS = 1 // JWT expires in 1 day according to API spec
 
