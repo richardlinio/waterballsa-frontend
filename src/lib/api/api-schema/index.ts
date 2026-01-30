@@ -24,6 +24,7 @@ export type {
   UserInfo,
   LoginResponse,
   LogoutResponse,
+  RefreshResponse,
 } from './auth'
 
 // User types - User profile and role models

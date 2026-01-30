@@ -45,3 +45,11 @@ export interface LoginResponse {
 export interface LogoutResponse {
   message: string
 }
+
+/**
+ * Refresh token response
+ */
+export interface RefreshResponse {
+  accessToken: string
+  user: UserInfo
+}

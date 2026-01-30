@@ -18,4 +18,5 @@ export type ApiResponse<T> =
   | {
       success: false
       error: ApiError
+      shouldRetry?: boolean
     }

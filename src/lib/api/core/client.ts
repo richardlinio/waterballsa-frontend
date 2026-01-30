@@ -218,6 +218,20 @@ export class ApiClient {
           result = await this.config.interceptors.response(result)
         }
 
+        // Check if response should be retried (after token refresh)
+        if (!result.success && result.shouldRetry) {
+          // Update request config with new token from request interceptor
+          if (this.config.interceptors?.request) {
+            requestConfig = await this.config.interceptors.request(requestConfig)
+          }
+          // Retry the request once with new token
+          result = await this.executeRequest<T>(requestConfig, options)
+          // Apply response interceptor again for the retry result
+          if (this.config.interceptors?.response) {
+            result = await this.config.interceptors.response(result)
+          }
+        }
+
         return result
       } catch (error) {
         const errorResponse = this.createErrorResponse(error)
