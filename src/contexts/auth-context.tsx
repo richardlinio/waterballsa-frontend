@@ -8,6 +8,7 @@ import {
   useCallback,
   type ReactNode,
 } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   getToken,
   setToken as saveToken,
@@ -15,6 +16,7 @@ import {
   getUserInfo,
   setUserInfo,
   removeUserInfo,
+  onLogout,
 } from '@/lib/auth'
 import { authApi } from '@/lib/api'
 import type { UserInfo } from '@/lib/api/api-schema'
@@ -37,6 +39,7 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<UserInfo | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter()
 
   // 初始化時檢查 token
   useEffect(() => {
@@ -52,12 +55,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
     }
     setIsLoading(false)
-  }, [])
-
-  const login = useCallback((token: string, userData: UserInfo) => {
-    saveToken(token)
-    setUserInfo(userData)
-    setUser(userData)
   }, [])
 
   const logout = useCallback(async () => {
@@ -76,6 +73,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
       removeUserInfo()
       setUser(null)
     }
+  }, [])
+
+  // Listen for logout events from API layer (when token refresh fails)
+  useEffect(() => {
+    const unsubscribe = onLogout(() => {
+      // When refresh fails, logout and redirect to login page
+      logout().then(() => {
+        router.push('/login')
+      })
+    })
+
+    return unsubscribe
+  }, [logout, router])
+
+  const login = useCallback((token: string, userData: UserInfo) => {
+    saveToken(token)
+    setUserInfo(userData)
+    setUser(userData)
   }, [])
 
   const updateUser = useCallback((userData: UserInfo) => {

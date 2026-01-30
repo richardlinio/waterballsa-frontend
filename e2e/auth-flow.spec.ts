@@ -101,7 +101,7 @@ test.describe('Complete Authentication Flow', () => {
     await test.step('Verify authentication state persists', async () => {
       // Check for auth cookies
       const cookies = await context.cookies()
-      const authToken = cookies.find(cookie => cookie.name === 'auth_token')
+      const authToken = cookies.find(cookie => cookie.name === 'access_token')
       const userInfo = cookies.find(cookie => cookie.name === 'user_info')
 
       expect(authToken).toBeTruthy()
@@ -130,7 +130,7 @@ test.describe('Complete Authentication Flow', () => {
       // Verify cookies are cleared
       const cookiesAfterLogout = await context.cookies()
       const authTokenAfterLogout = cookiesAfterLogout.find(
-        cookie => cookie.name === 'auth_token'
+        cookie => cookie.name === 'access_token'
       )
       const userInfoAfterLogout = cookiesAfterLogout.find(
         cookie => cookie.name === 'user_info'

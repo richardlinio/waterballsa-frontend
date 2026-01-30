@@ -6,6 +6,7 @@ import {
   LoginRequest,
   LoginResponse,
   LogoutResponse,
+  RefreshResponse,
 } from '@/lib/api/api-schema'
 
 /**
@@ -78,6 +79,24 @@ export const authApi = {
    */
   logout: async (): Promise<ApiResponse<LogoutResponse>> => {
     return apiClient.post<LogoutResponse>('/auth/logout')
+  },
+
+  /**
+   * Refresh access token using refresh token from cookie
+   * @returns Promise<ApiResponse<RefreshResponse>>
+   *
+   * @example
+   * ```typescript
+   * const result = await authApi.refresh()
+   * if (result.success) {
+   *   console.log('Token refreshed:', result.data.accessToken)
+   * } else {
+   *   console.error('Refresh failed:', result.error.message)
+   * }
+   * ```
+   */
+  refresh: async (): Promise<ApiResponse<RefreshResponse>> => {
+    return apiClient.post<RefreshResponse>('/auth/refresh')
   },
 }
 

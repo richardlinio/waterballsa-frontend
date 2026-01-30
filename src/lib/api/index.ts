@@ -36,6 +36,7 @@ export type {
   LoginRequest,
   LoginResponse,
   LogoutResponse,
+  RefreshResponse,
   UserInfo,
   UserProfile,
   UserRole,

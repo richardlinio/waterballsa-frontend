@@ -4,6 +4,7 @@ import {
   ApiClientConfig,
 } from '@/lib/api/api-schema'
 import { getToken } from '@/lib/auth'
+import { refreshManager } from './token-refresh'
 
 /**
  * Default request interceptor - adds Authorization header if token exists
@@ -19,13 +20,28 @@ const defaultRequestInterceptor = (
 }
 
 /**
- * Default response interceptor
- * Note: 401 handling is delegated to the application layer (useApi hook)
+ * Default response interceptor with automatic token refresh on 401
  */
-const defaultResponseInterceptor = <T>(
+const defaultResponseInterceptor = async <T>(
   response: ApiResponse<T>
-): ApiResponse<T> => {
-  // Can be used for logging or other cross-cutting concerns
+): Promise<ApiResponse<T>> => {
+  // Check if response is 401 Unauthorized
+  if (!response.success && response.error.status === 401) {
+    // Attempt to refresh the token
+    const refreshSuccess = await refreshManager.performRefresh()
+
+    if (refreshSuccess) {
+      // Mark response for retry with new token
+      return {
+        ...response,
+        shouldRetry: true,
+      }
+    }
+
+    // Refresh failed - logout event already emitted by RefreshManager
+    // AuthContext will handle logout and redirect
+  }
+
   return response
 }
 

@@ -172,7 +172,7 @@ test.describe('Mission Progress Flow', () => {
         // Set auth cookies for browser
         await context.addCookies([
           {
-            name: 'auth_token',
+            name: 'access_token',
             value: credentials.authToken,
             domain: 'localhost',
             path: '/',
@@ -260,7 +260,7 @@ test.describe('Mission Progress Flow', () => {
       await test.step('Setup authenticated session', async () => {
         await context.addCookies([
           {
-            name: 'auth_token',
+            name: 'access_token',
             value: credentials.authToken,
             domain: 'localhost',
             path: '/',
@@ -379,7 +379,7 @@ test.describe('Mission Progress Flow', () => {
       await test.step('Setup authenticated session', async () => {
         await context.addCookies([
           {
-            name: 'auth_token',
+            name: 'access_token',
             value: credentials.authToken,
             domain: 'localhost',
             path: '/',

@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 import type { UserInfo } from '@/lib/api/api-schema'
 
-const TOKEN_KEY = 'auth_token'
+const TOKEN_KEY = 'access_token'
 const USER_INFO_KEY = 'user_info'
 const TOKEN_EXPIRY_DAYS = 1 // JWT expires in 1 day according to API spec
 
@@ -101,4 +101,48 @@ export function isTokenExpired(token: string): boolean {
 
   const expirationTime = (decoded.exp as number) * 1000 // Convert to milliseconds
   return Date.now() >= expirationTime
+}
+
+/**
+ * Logout event handling
+ * This allows the API layer to trigger logout without depending on React components
+ */
+type LogoutListener = () => void
+const logoutListeners = new Set<LogoutListener>()
+
+/**
+ * Register a listener for logout events
+ * Returns unsubscribe function
+ *
+ * @example
+ * ```typescript
+ * const unsubscribe = onLogout(() => {
+ *   console.log('User logged out')
+ * })
+ * // Later: unsubscribe()
+ * ```
+ */
+export function onLogout(listener: LogoutListener): () => void {
+  logoutListeners.add(listener)
+  return () => logoutListeners.delete(listener)
+}
+
+/**
+ * Emit logout event to all registered listeners
+ * Called by RefreshManager when token refresh fails
+ *
+ * @example
+ * ```typescript
+ * // In RefreshManager when refresh fails:
+ * emitLogout()
+ * ```
+ */
+export function emitLogout(): void {
+  logoutListeners.forEach(listener => {
+    try {
+      listener()
+    } catch (error) {
+      console.error('Error in logout listener:', error)
+    }
+  })
 }
